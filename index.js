@@ -59,7 +59,8 @@ client.on('ready', () => __awaiter(void 0, void 0, void 0, function* () {
     let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
     errorChannel.send({
         embeds: [new discord_js_1.MessageEmbed()
-                .setTitle('The bot had been restarted.')
+                .setTitle('Notification')
+                .setDescription('The bot had just been restarted.')
                 .setColor('GOLD')
                 .setTimestamp()
         ]

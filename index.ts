@@ -28,7 +28,8 @@ client.on('ready', async () => {
     let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
     errorChannel.send({
         embeds: [new MessageEmbed()
-            .setTitle('The bot had been restarted.')
+            .setTitle('Notification')
+            .setDescription('The bot had just been restarted.')
             .setColor('GOLD')
             .setTimestamp()
         ]
