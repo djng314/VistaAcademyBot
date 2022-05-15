@@ -1,0 +1,22 @@
+{
+  "name": "vista-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damien",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.7.0",
+    "dotenv": "^16.0.1",
+    "mongoose": "^6.3.3",
+    "ms": "^2.1.3",
+    "noblox.js": "^4.13.1",
+    "wokcommands": "^1.5.3"
+  },
+  "devDependencies": {
+    "@types/ms": "^0.7.31"
+  }
+}
