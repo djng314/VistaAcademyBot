@@ -137,8 +137,9 @@ client.on('messageDelete', message => {
     errorChannel.send({
         embeds: [new discord_js_1.MessageEmbed()
                 .setTitle('Message Deleted')
-                .setDescription(`A message by ${(_b = message.member) === null || _b === void 0 ? void 0 : _b.user.username} also known as ${(_c = message.member) === null || _c === void 0 ? void 0 : _c.displayName} was deleted in ${channelName} (<#${channel.id}>)`)
+                .setDescription(`A message by ${(_b = message.member) === null || _b === void 0 ? void 0 : _b.user.username} also known as ${(_c = message.member) === null || _c === void 0 ? void 0 : _c.displayName} was deleted in ${channelName} (<#${channel.id}>). \n\n ** Message Content: ** ${message.content}`)
                 .setColor('RED')
+                .setFooter({ text: 'Vista Academy | Developed by Damien' })
                 .setTimestamp()
         ]
     });
