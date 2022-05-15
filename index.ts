@@ -4,11 +4,11 @@ import WOKCommands from "wokcommands"
 import path from "path"
 import noblox from "noblox.js"
 import mongoose from "mongoose"
+import merits from "./models/merits"
 
 
 
-
-// const talkedRecently = new Set();
+const talkedRecently = new Set();
 dotenv.config()
 
 const client = new discordJs.Client({
@@ -74,6 +74,37 @@ client.on('error', error => {
     throw (error)
 })
 
+client.on('messageCreate',async(message)=>{
+    if(message.content.length >5){
+      
+      if(message.member){
+        if(talkedRecently.has(message.author.id)){
+          console.log("On cool down")
+        }else{
+          talkedRecently.add(message.author.id);
+          
+          var RobloxUsername = message.member.displayName
+          var RobloxID = await noblox.getIdFromUsername(RobloxUsername)
+
+          if(RobloxID){
+            let data = await merits.findOne({RobloxUserID: RobloxID})
+            if(data){
+                await merits.findOneAndUpdate({RobloxUserID: RobloxID},{Merits:parseInt(data.Merits)+1})
+            }else{
+                await merits.create({
+                    RobloxUserID: RobloxID,
+                    Merits: 1
+                })
+            }
+          }
+           
+          setTimeout(() => {
+            talkedRecently.delete(message.author.id);
+            console.log("Deleted cooldown")
+          }, 240000);
+        }
+    }
+}})
 
 
 

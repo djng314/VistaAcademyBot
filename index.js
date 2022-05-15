@@ -41,7 +41,8 @@ const wokcommands_1 = __importDefault(require("wokcommands"));
 const path_1 = __importDefault(require("path"));
 const noblox_js_1 = __importDefault(require("noblox.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
-// const talkedRecently = new Set();
+const merits_1 = __importDefault(require("./models/merits"));
+const talkedRecently = new Set();
 dotenv_1.default.config();
 const client = new discord_js_1.default.Client({
     intents: [
@@ -96,4 +97,34 @@ client.on('error', error => {
     console.log('Error: ' + error);
     throw (error);
 });
+client.on('messageCreate', (message) => __awaiter(void 0, void 0, void 0, function* () {
+    if (message.content.length > 5) {
+        if (message.member) {
+            if (talkedRecently.has(message.author.id)) {
+                console.log("On cool down");
+            }
+            else {
+                talkedRecently.add(message.author.id);
+                var RobloxUsername = message.member.displayName;
+                var RobloxID = yield noblox_js_1.default.getIdFromUsername(RobloxUsername);
+                if (RobloxID) {
+                    let data = yield merits_1.default.findOne({ RobloxUserID: RobloxID });
+                    if (data) {
+                        yield merits_1.default.findOneAndUpdate({ RobloxUserID: RobloxID }, { Merits: parseInt(data.Merits) + 1 });
+                    }
+                    else {
+                        yield merits_1.default.create({
+                            RobloxUserID: RobloxID,
+                            Merits: 1
+                        });
+                    }
+                }
+                setTimeout(() => {
+                    talkedRecently.delete(message.author.id);
+                    console.log("Deleted cooldown");
+                }, 240000);
+            }
+        }
+    }
+}));
 client.login(process.env.TOKEN);
