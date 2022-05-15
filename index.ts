@@ -115,7 +115,7 @@ client.on('messageDelete', message => {
     errorChannel.send({
         embeds: [new MessageEmbed()
             .setTitle('Message Deleted')
-            .setDescription(`A message by ${message.member?.user.username} also known as ${message.member?.displayName} was deleted in ${channelName} (<#${channel.id}>). \n\n ** Message Content: ** ${message.content}`)
+            .setDescription(`A message by ${message.member?.user.username} also known as ${message.member?.displayName} (<@${message.member?.id}>) was deleted in ${channelName} (<#${channel.id}>). \n\n ** Message Content: ** ${message.content}`)
             .setColor('RED')
             .setFooter({text: 'Vista Academy | Developed by Damien'})
             .setTimestamp()
