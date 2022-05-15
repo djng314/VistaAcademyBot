@@ -19,6 +19,7 @@ exports.default = {
     expectedArgs: '[amount]',
     slash: 'both',
     callback: ({ message, interaction, channel, args }) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a, _b;
         const amount = parseInt(interaction.options.getString("amount") || "0");
         if (message) {
             yield message.delete();
@@ -30,6 +31,17 @@ exports.default = {
             .setColor("WHITE")
             .setFooter({ text: "Vista Academy | Developed by Damien" });
         if (interaction) {
+            let primaryGuild = interaction.guild;
+            let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
+            yield errorChannel.send({
+                embeds: [
+                    new discord_js_1.MessageEmbed()
+                        .setTitle("**Bulk Message Deleted**")
+                        .setDescription(` \n Deleted ${size} message(s). \n **Deleted by: ** <@${(_a = interaction.member) === null || _a === void 0 ? void 0 : _a.user.id}> \n **Channel: ** <#${(_b = interaction.channel) === null || _b === void 0 ? void 0 : _b.id}>`)
+                        .setColor("RED")
+                        .setFooter({ text: "Vista Academy | Developed by Damien" })
+                ]
+            });
             return reply;
         }
         channel.send({ embeds: [reply] });

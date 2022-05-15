@@ -1,6 +1,6 @@
 // module.exports = {}
 
-import { MessageEmbed } from 'discord.js'
+import { Guild, MessageEmbed, TextChannel } from 'discord.js'
 import { ICommand } from 'wokcommands'
 
 export default {
@@ -36,8 +36,21 @@ export default {
     .setFooter({text:"Vista Academy | Developed by Damien"})
 
     if (interaction) {
+      let primaryGuild = interaction.guild as Guild
+      let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
+      await errorChannel.send({
+        embeds:[
+          new MessageEmbed()
+        .setTitle("**Bulk Message Deleted**")
+        .setDescription(` \n Deleted ${size} message(s). \n **Deleted by: ** <@${interaction.member?.user.id}> \n **Channel: ** <#${interaction.channel?.id}>`)
+        .setColor("RED")
+        .setFooter({text:"Vista Academy | Developed by Damien"})
+        ]
+      })
       return reply
     }
+
+    
 
     channel.send({embeds: [reply]})
   },
