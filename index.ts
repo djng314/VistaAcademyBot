@@ -106,7 +106,22 @@ client.on('messageCreate',async(message)=>{
     }
 }})
 
+client.on('messageDelete', message => {
+	console.log(`A message by ${message.member?.user.username} was deleted, but we don't know by who yet.`);
+    let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
+    let channel = message.channel as TextChannel
+    let channelName = channel.name
+    let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
+    errorChannel.send({
+        embeds: [new MessageEmbed()
+            .setTitle('Message Deleted')
+            .setDescription(`A message by ${message.member?.user.username} also known as ${message.member?.displayName} was deleted in ${channelName} (<#${channel.id}>)`)
+            .setColor('RED')
+            .setTimestamp()
+        ]
+    })
 
+});
 
 
 

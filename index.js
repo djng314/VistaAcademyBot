@@ -127,4 +127,20 @@ client.on('messageCreate', (message) => __awaiter(void 0, void 0, void 0, functi
         }
     }
 }));
+client.on('messageDelete', message => {
+    var _a, _b, _c;
+    console.log(`A message by ${(_a = message.member) === null || _a === void 0 ? void 0 : _a.user.username} was deleted, but we don't know by who yet.`);
+    let primaryGuild = client.guilds.cache.get('973253184137076806');
+    let channel = message.channel;
+    let channelName = channel.name;
+    let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
+    errorChannel.send({
+        embeds: [new discord_js_1.MessageEmbed()
+                .setTitle('Message Deleted')
+                .setDescription(`A message by ${(_b = message.member) === null || _b === void 0 ? void 0 : _b.user.username} also known as ${(_c = message.member) === null || _c === void 0 ? void 0 : _c.displayName} was deleted in ${channelName} (<#${channel.id}>)`)
+                .setColor('RED')
+                .setTimestamp()
+        ]
+    });
+});
 client.login(process.env.TOKEN);
