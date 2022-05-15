@@ -41,7 +41,7 @@ export default {
               embeds:[
                 new MessageEmbed()
               .setTitle(`**Member ${action}**`)
-              .setDescription(` \n ${targetMember.user.username} had been ${action.toLowerCase()} from the server for ${duration}. \n **Moderator: ** <@${interaction.member?.user.id}> \n **Reason: ** <#${reason}>`)
+              .setDescription(` \n ${targetMember.user.username} had been ${action.toLowerCase()} from the server for ${duration}. \n **Moderator: ** <@${interaction.member?.user.id}> \n **Reason: ** ${reason}`)
               .setColor("RED")
               .setFooter({text:"Vista Academy | Developed by Damien"})
               ]

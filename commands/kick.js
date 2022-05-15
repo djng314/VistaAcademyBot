@@ -74,7 +74,7 @@ exports.default = {
             embeds: [
                 new discord_js_1.MessageEmbed()
                     .setTitle(`**Member ${action}**`)
-                    .setDescription(` \n ${target.user.username} had been ${action.toLowerCase()} from the server. \n **Moderator: ** <@${(_a = interaction.member) === null || _a === void 0 ? void 0 : _a.user.id}> \n **Reason: ** <#${reason}>`)
+                    .setDescription(` \n ${target.user.username} had been ${action.toLowerCase()} from the server. \n **Moderator: ** <@${(_a = interaction.member) === null || _a === void 0 ? void 0 : _a.user.id}> \n **Reason: ** ${reason}`)
                     .setColor("RED")
                     .setFooter({ text: "Vista Academy | Developed by Damien" })
             ]
