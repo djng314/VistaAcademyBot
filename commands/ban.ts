@@ -1,6 +1,6 @@
 
 
-import { GuildMember, Message, MessageEmbed } from 'discord.js'
+import { Guild, GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js'
 import { ICommand } from 'wokcommands'
 
 export default {
@@ -67,8 +67,8 @@ export default {
         }
         
             let DMembed = new MessageEmbed()
-                .setTitle("**Cereza Moderation**")
-                .setDescription(`You have been banned from Cereza for ${reason}. \n \n Moderator: ${interaction.user.username}`)
+                .setTitle("**Vista Academy Moderation**")
+                .setDescription(`You have been banned from Vista Academy for ${reason}. \n \n Moderator: ${interaction.user.username}`)
                 .setFooter({text:"Vista Academy | Developed by Damien"})
                 .setColor("ORANGE")
 
@@ -96,7 +96,18 @@ export default {
                 .setDescription(`${target.user.username} had been banned. \n \n **Reason: ** ${reason} \n **Moderator:** ${interaction.user.username}`)
                 .setFooter({text:"Vista Academy | Developed by Damien"})
                 .setColor("DARK_PURPLE")
-
+                let primaryGuild = interaction.guild as Guild
+                let action = 'Banned'
+                let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
+                await errorChannel.send({
+                  embeds:[
+                    new MessageEmbed()
+                  .setTitle(`**Member ${action}**`)
+                  .setDescription(` \n ${target.user.username} had been ${action.toLowerCase()} from the server. \n **Moderator: ** <@${interaction.member?.user.id}> \n **Reason: ** <#${reason}>`)
+                  .setColor("RED")
+                  .setFooter({text:"Vista Academy | Developed by Damien"})
+                  ]
+                })
             return BanEmbed
 
 

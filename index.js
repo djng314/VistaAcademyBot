@@ -74,7 +74,7 @@ client.on('ready', () => __awaiter(void 0, void 0, void 0, function* () {
         testServers: ['973253184137076806'],
         // Pass in the new dbOptions
         // Pass in your own mongo connection URI
-        // mongoUri: "mongodb+srv://cerezadiscord:Cereza314@cluster0.1gt3c.mongodb.net/test"
+        // mongoUri: "mongodb+srv://Vista Academydiscord:Vista Academy314@cluster0.1gt3c.mongodb.net/test"
         mongoUri: process.env["dbLink"]
     });
 }));

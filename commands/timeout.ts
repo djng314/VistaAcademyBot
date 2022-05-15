@@ -1,5 +1,5 @@
 import ms from 'ms'
-import { GuildMember, Message, MessageEmbed } from 'discord.js'
+import { Guild, GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js'
 import { ICommand } from 'wokcommands'
 
 export default {
@@ -33,6 +33,20 @@ export default {
                     interaction.reply({content:'Please  provide a reason.' , ephemeral: true})
                 } else {
                     targetMember.timeout(duration, reason)
+
+                    let primaryGuild = interaction.guild as Guild
+            let action = 'Timeout'
+            let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
+            await errorChannel.send({
+              embeds:[
+                new MessageEmbed()
+              .setTitle(`**Member ${action}**`)
+              .setDescription(` \n ${targetMember.user.username} had been ${action.toLowerCase()} from the server for ${duration}. \n **Moderator: ** <@${interaction.member?.user.id}> \n **Reason: ** <#${reason}>`)
+              .setColor("RED")
+              .setFooter({text:"Vista Academy | Developed by Damien"})
+              ]
+            })
+
                     interaction.reply({embeds:[new MessageEmbed()
                     .setTitle('User Timeout')
                     .setDescription(`${targetMember.nickname} had been timeout.`)

@@ -20,6 +20,7 @@ exports.default = {
     expectedArgs: '<user> <reason>',
     expectedArgsTypes: ['USER', 'STRING'],
     callback: ({ message, interaction, args }) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
         const target = interaction.options.getMember('user');
         console.log(target.nickname);
         if (!target) {
@@ -49,8 +50,8 @@ exports.default = {
             return noReasonEmbed;
         }
         let DMembed = new discord_js_1.MessageEmbed()
-            .setTitle("**Cereza Moderation**")
-            .setDescription(`You have been kicked from Cereza for ${reason}. \n \n Moderator: ${interaction.user.username}`)
+            .setTitle("**Vista Academy Moderation**")
+            .setDescription(`You have been kicked from Vista Academy for ${reason}. \n \n Moderator: ${interaction.user.username}`)
             .setFooter({ text: "Vista Academy | Developed by Damien" })
             .setColor("ORANGE");
         /* try{
@@ -66,6 +67,18 @@ exports.default = {
             .setDescription(`${target.user.username} had been kicked. \n \n **Reason: ** ${reason} \n **Moderator:** ${interaction.user.username}`)
             .setFooter({ text: "Vista Academy | Developed by Damien" })
             .setColor("PURPLE");
+        let primaryGuild = interaction.guild;
+        let action = 'Kicked';
+        let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
+        yield errorChannel.send({
+            embeds: [
+                new discord_js_1.MessageEmbed()
+                    .setTitle(`**Member ${action}**`)
+                    .setDescription(` \n ${target.user.username} had been ${action.toLowerCase()} from the server. \n **Moderator: ** <@${(_a = interaction.member) === null || _a === void 0 ? void 0 : _a.user.id}> \n **Reason: ** <#${reason}>`)
+                    .setColor("RED")
+                    .setFooter({ text: "Vista Academy | Developed by Damien" })
+            ]
+        });
         return KickEmbed;
     }),
 };

@@ -24,6 +24,7 @@ exports.default = {
     expectedArgs: '<user> <length> <reason>',
     expectedArgsTypes: ['USER', 'STRING', 'STRING'],
     callback: ({ message, interaction, args }) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
         let duration = (0, ms_1.default)(interaction.options.getString('length') || '1h');
         let targetMember = interaction.options.getMember('user');
         let reason = interaction.options.getString('reason');
@@ -40,6 +41,18 @@ exports.default = {
                 }
                 else {
                     targetMember.timeout(duration, reason);
+                    let primaryGuild = interaction.guild;
+                    let action = 'Timeout';
+                    let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
+                    yield errorChannel.send({
+                        embeds: [
+                            new discord_js_1.MessageEmbed()
+                                .setTitle(`**Member ${action}**`)
+                                .setDescription(` \n ${targetMember.user.username} had been ${action.toLowerCase()} from the server for ${duration}. \n **Moderator: ** <@${(_a = interaction.member) === null || _a === void 0 ? void 0 : _a.user.id}> \n **Reason: ** <#${reason}>`)
+                                .setColor("RED")
+                                .setFooter({ text: "Vista Academy | Developed by Damien" })
+                        ]
+                    });
                     interaction.reply({ embeds: [new discord_js_1.MessageEmbed()
                                 .setTitle('User Timeout')
                                 .setDescription(`${targetMember.nickname} had been timeout.`)
