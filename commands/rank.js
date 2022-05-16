@@ -28,64 +28,96 @@ exports.default = {
     callback: ({ message, interaction, args }) => __awaiter(void 0, void 0, void 0, function* () {
         var targetUsername = interaction.options.getString('roblox-user') || '';
         var rankToRank = interaction.options.getString('rank') || '';
-        var RobloxID = yield noblox_js_1.default.getIdFromUsername(targetUsername);
-        var RoleType;
-        if (Number(rankToRank)) {
-            RoleType = 'number';
-        }
-        else {
-            RoleType = 'name';
-        }
-        if (RobloxID) {
-            var originalRankInGroup = yield noblox_js_1.default.getRankInGroup(6034265, RobloxID);
-            if (originalRankInGroup > 0) {
-                try {
-                    if (RoleType == 'name') {
-                        let newRank = rankToRank;
-                        yield noblox_js_1.default.setRank(6034265, RobloxID, newRank);
+        try {
+            var RobloxID = yield noblox_js_1.default.getIdFromUsername(targetUsername);
+            var RoleType;
+            if (Number(rankToRank)) {
+                RoleType = 'number';
+            }
+            else {
+                RoleType = 'name';
+            }
+            if (RobloxID) {
+                var originalRankInGroup = yield noblox_js_1.default.getRankInGroup(6034265, RobloxID);
+                if (originalRankInGroup > 0) {
+                    try {
+                        if (RoleType == 'name') {
+                            let newRank = rankToRank;
+                            yield noblox_js_1.default.setRank(6034265, RobloxID, newRank);
+                        }
+                        else {
+                            let newRank = parseInt(rankToRank);
+                            yield noblox_js_1.default.setRank(6034265, RobloxID, newRank);
+                        }
+                        let embed = yield embedClass.infoEmbed('Ranking Sucess', `${targetUsername} had been ranked succesfully.`);
+                        interaction.reply({ embeds: [embed] });
                     }
-                    else {
-                        let newRank = parseInt(rankToRank);
-                        yield noblox_js_1.default.setRank(6034265, RobloxID, newRank);
+                    catch (e) {
+                        if (typeof e === "string") {
+                            e.toUpperCase(); // works, `e` narrowed to string
+                            console.log(e);
+                            interaction.reply({
+                                embeds: [new discord_js_1.MessageEmbed()
+                                        .setTitle('Error')
+                                        .setDescription(e)
+                                        .setColor('RED')
+                                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                ]
+                            });
+                            throw (e);
+                            return;
+                        }
+                        else if (e instanceof Error) {
+                            interaction.reply({
+                                embeds: [new discord_js_1.MessageEmbed()
+                                        .setTitle(e.name)
+                                        .setDescription(e.message)
+                                        .setColor('RED')
+                                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                ]
+                            });
+                            throw (e);
+                            return;
+                        }
                     }
-                    let embed = yield embedClass.infoEmbed('Ranking Sucess', `${targetUsername} had been ranked succesfully.`);
-                    interaction.reply({ embeds: [embed] });
                 }
-                catch (e) {
-                    if (typeof e === "string") {
-                        e.toUpperCase(); // works, `e` narrowed to string
-                        console.log(e);
-                        interaction.reply({
-                            embeds: [new discord_js_1.MessageEmbed()
-                                    .setTitle('Error')
-                                    .setDescription(e)
-                                    .setColor('RED')
-                                    .setFooter({ text: 'Vista Academy | Developed by Damien' })
-                            ]
-                        });
-                        throw (e);
-                    }
-                    else if (e instanceof Error) {
-                        interaction.reply({
-                            embeds: [new discord_js_1.MessageEmbed()
-                                    .setTitle(e.name)
-                                    .setDescription(e.message)
-                                    .setColor('RED')
-                                    .setFooter({ text: 'Vista Academy | Developed by Damien' })
-                            ]
-                        });
-                        throw (e);
-                    }
+                else {
+                    let embed = yield embedClass.errorEmbed('User is not in group', `${targetUsername} is not in Vista Avademy. \n **Group link:** https://vistaacademy.xyz/roblox`);
+                    interaction.reply({ embeds: [embed] });
                 }
             }
             else {
-                let embed = yield embedClass.errorEmbed('User is not in group', `${targetUsername} is not in Vista Avademy. \n **Group link:** https://vistaacademy.xyz/roblox`);
+                let embed = yield embedClass.errorEmbed('User is not a valid Roblox user', `${targetUsername} is not found on Roblox.`);
                 interaction.reply({ embeds: [embed] });
             }
         }
-        else {
-            let embed = yield embedClass.errorEmbed('User is not a valid Roblox user', `${targetUsername} is not found on Roblox.`);
-            interaction.reply({ embeds: [embed] });
+        catch (error) {
+            if (typeof error === "string") {
+                error.toUpperCase(); // works, `e` narrowed to string
+                console.log(error);
+                interaction.reply({
+                    embeds: [new discord_js_1.MessageEmbed()
+                            .setTitle('Error')
+                            .setDescription(error)
+                            .setColor('RED')
+                            .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                    ]
+                });
+                throw (error);
+                return;
+            }
+            else if (error instanceof Error) {
+                interaction.reply({
+                    embeds: [new discord_js_1.MessageEmbed()
+                            .setTitle(error.name)
+                            .setDescription(error.message)
+                            .setColor('RED')
+                            .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                    ]
+                });
+                throw (error);
+                return;
+            }
         }
     })
 };

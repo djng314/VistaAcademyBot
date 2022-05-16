@@ -22,62 +22,95 @@ export default {
     callback: async({ message, interaction, args }) => {
         var targetUsername:string = interaction.options.getString('roblox-user') || ''
         var rankToRank:string = interaction.options.getString('rank') || '' 
-        var RobloxID = await noblox.getIdFromUsername(targetUsername)
+        
+        try{
+            var RobloxID = await noblox.getIdFromUsername(targetUsername)
+            var RoleType:string;
 
-        var RoleType:string;
-
-        if(Number(rankToRank)){
-            RoleType = 'number'
-        }else{
-            RoleType = 'name'
-        }
-        if(RobloxID){
-            var originalRankInGroup = await noblox.getRankInGroup(6034265, RobloxID)
-
-            if(originalRankInGroup >0 ){
-                try {
-                    if(RoleType == 'name'){
-                        let newRank = rankToRank
-                        await noblox.setRank(6034265,RobloxID,newRank)
-                    }else{
-                        let newRank = parseInt(rankToRank)
-                        await noblox.setRank(6034265,RobloxID,newRank)
+            if(Number(rankToRank)){
+                RoleType = 'number'
+            }else{
+                RoleType = 'name'
+            }
+            if(RobloxID){
+                var originalRankInGroup = await noblox.getRankInGroup(6034265, RobloxID)
+    
+                if(originalRankInGroup >0 ){
+                    try {
+                        if(RoleType == 'name'){
+                            let newRank = rankToRank
+                            await noblox.setRank(6034265,RobloxID,newRank)
+                        }else{
+                            let newRank = parseInt(rankToRank)
+                            await noblox.setRank(6034265,RobloxID,newRank)
+                        }
+                        let  embed = await embedClass.infoEmbed('Ranking Sucess',`${targetUsername} had been ranked succesfully.`)
+                        interaction.reply({embeds: [embed]})
+                    } catch (e) {
+                        if (typeof e === "string") {
+                            e.toUpperCase() // works, `e` narrowed to string
+                            console.log(e)
+                            interaction.reply({
+                                embeds: [new MessageEmbed()
+                                    .setTitle('Error')
+                                    .setDescription(e)
+                                    .setColor('RED')
+                                    .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                ]
+                            })
+                            throw (e)
+                            return
+                        } else if (e instanceof Error) {
+                            interaction.reply({
+                                embeds: [new MessageEmbed()
+                                    .setTitle(e.name)
+                                    .setDescription(e.message)
+                                    .setColor('RED')
+                                    .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                ]
+                            })
+                            throw (e)
+                            return
+                        }
                     }
-                    let  embed = await embedClass.infoEmbed('Ranking Sucess',`${targetUsername} had been ranked succesfully.`)
+                }else{
+                    let  embed = await embedClass.errorEmbed('User is not in group',`${targetUsername} is not in Vista Avademy. \n **Group link:** https://vistaacademy.xyz/roblox`)
                     interaction.reply({embeds: [embed]})
-                } catch (e) {
-                    if (typeof e === "string") {
-                        e.toUpperCase() // works, `e` narrowed to string
-                        console.log(e)
-                        interaction.reply({
-                            embeds: [new MessageEmbed()
-                                .setTitle('Error')
-                                .setDescription(e)
-                                .setColor('RED')
-                                .setFooter({ text: 'Vista Academy | Developed by Damien' })
-                            ]
-                        })
-                        throw (e)
-                    } else if (e instanceof Error) {
-                        interaction.reply({
-                            embeds: [new MessageEmbed()
-                                .setTitle(e.name)
-                                .setDescription(e.message)
-                                .setColor('RED')
-                                .setFooter({ text: 'Vista Academy | Developed by Damien' })
-                            ]
-                        })
-                        throw (e)
-                    }
                 }
             }else{
-                let  embed = await embedClass.errorEmbed('User is not in group',`${targetUsername} is not in Vista Avademy. \n **Group link:** https://vistaacademy.xyz/roblox`)
-                interaction.reply({embeds: [embed]})
+                let  embed = await embedClass.errorEmbed('User is not a valid Roblox user',`${targetUsername} is not found on Roblox.`)
+                    interaction.reply({embeds: [embed]})
             }
-        }else{
-            let  embed = await embedClass.errorEmbed('User is not a valid Roblox user',`${targetUsername} is not found on Roblox.`)
-                interaction.reply({embeds: [embed]})
+        }catch(error){
+            if (typeof error === "string") {
+                error.toUpperCase() // works, `e` narrowed to string
+                console.log(error)
+                interaction.reply({
+                    embeds: [new MessageEmbed()
+                        .setTitle('Error')
+                        .setDescription(error)
+                        .setColor('RED')
+                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                    ]
+                })
+                throw (error)
+                return
+            } else if (error instanceof Error) {
+                interaction.reply({
+                    embeds: [new MessageEmbed()
+                        .setTitle(error.name)
+                        .setDescription(error.message)
+                        .setColor('RED')
+                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                    ]
+                })
+                throw (error)
+                return
+            }
         }
+        
+
+
     }
 }as ICommand
 
