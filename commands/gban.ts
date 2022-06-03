@@ -30,7 +30,7 @@ export default {
             let moderatorUserID = await noblox.getIdFromUsername(moderatorUsername)
             let data = await VABans.findOne({RobloxUserID:robloxUserID})
             if(data){
-                interaction.reply({embeds:[await embedClass.errorEmbed(`${robloxUsername} already had been banned`,`**Ban log: ** \nReason: ${data.reason}\nModerator: ${await noblox.getUsernameFromId(Number(data.ModeratorUserID))}`)]})
+                interaction.reply({embeds:[await embedClass.errorEmbed(`${robloxUsername} already had been banned`,`**Ban log: ** \nReason: ${data.Reason}\nModerator: ${await noblox.getUsernameFromId(Number(data.ModeratorUserID))}`)]})
             }else{
                await  VABans.create({
                 RobloxUserID: robloxUserID,

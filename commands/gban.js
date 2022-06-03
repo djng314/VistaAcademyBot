@@ -34,7 +34,7 @@ exports.default = {
             let moderatorUserID = yield noblox_js_1.default.getIdFromUsername(moderatorUsername);
             let data = yield gamebans_1.default.findOne({ RobloxUserID: robloxUserID });
             if (data) {
-                interaction.reply({ embeds: [yield embedClass.errorEmbed(`${robloxUsername} already had been banned`, `**Ban log: ** \nReason: ${data.reason}\nModerator: ${yield noblox_js_1.default.getUsernameFromId(Number(data.ModeratorUserID))}`)] });
+                interaction.reply({ embeds: [yield embedClass.errorEmbed(`${robloxUsername} already had been banned`, `**Ban log: ** \nReason: ${data.Reason}\nModerator: ${yield noblox_js_1.default.getUsernameFromId(Number(data.ModeratorUserID))}`)] });
             }
             else {
                 yield gamebans_1.default.create({
