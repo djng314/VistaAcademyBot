@@ -27,7 +27,7 @@ export default {
           .setFooter({text:'Vista Academy | Developed by Damien'})
     ]})
 
-    const filter = m => m.content.includes('discord');
+    const filter = m => m.author.id == interaction.user.id;
     const channel = interaction.channel as TextChannel
 
     const collector = channel.createMessageCollector({ filter, max: 1 ,time: 15000 });

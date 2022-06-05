@@ -26,12 +26,21 @@ exports.default = {
         interaction.reply({ embeds: [
                 new discord_js_1.MessageEmbed()
                     .setTitle('Image Upload')
-                    .setDescription('Upload the image as an attachment. ')
+                    .setDescription('Upload the image as an attachment. \n **Does not work yet** ')
                     .setColor('AQUA')
                     .setFooter({ text: 'Vista Academy | Developed by Damien' })
             ] });
-        const filter = m => m.content.includes('discord');
+        const filter = m => m.author.id == interaction.user.id;
         const channel = interaction.channel;
-        const collector = channel.createMessageCollector({ filter, time: 15000 });
+        const collector = channel.createMessageCollector({ filter, max: 1, time: 15000 });
+        collector.on('collect', m => {
+            let attachment = m.attachments.first();
+            let proxyURL = attachment.proxyURL;
+            let url = attachment.url;
+            console.log(`proxy url: ${proxyURL} | url: ${url}`);
+        });
+        collector.on('end', collected => {
+            console.log(`Collected ${collected.size} items`);
+        });
     })
 };
