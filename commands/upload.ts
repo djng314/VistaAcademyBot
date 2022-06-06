@@ -49,7 +49,11 @@ export default {
                     let proxyURL = attachment.proxyURL
                     let url = attachment.url
                     try {
-                       noblox.uploadItem(itemName,13,fs.createReadStream(url))
+                      let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream(url),6034265)
+                      let msg = `\n\n Asset ID: ${uploadData.id}`
+                      interaction.followUp({embeds:[
+                            
+                        ]})
                     } catch (e) {
                         if (typeof e === "string") {
                             e.toUpperCase() // works, `e` narrowed to string
@@ -78,8 +82,6 @@ export default {
             collector.on('end', async collected => {
                 if (collected.size == 0){
                     interaction.followUp({embeds:[await embedClass.errorEmbed('Timeout','Please try again as the command had timed out.')]})
-                }else{
-                    interaction.followUp({embeds:[await embedClass.infoEmbed('Succes','Image upload succesfully \n **DEVELOPER TESTING ONLY**')]})
                 }
             });
         }

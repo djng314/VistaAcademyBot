@@ -51,7 +51,9 @@ exports.default = {
                     let proxyURL = attachment.proxyURL;
                     let url = attachment.url;
                     try {
-                        noblox_js_1.default.uploadItem(itemName, 13, fs_1.default.createReadStream(url));
+                        let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_1.default.createReadStream(url), 6034265);
+                        let msg = `\n\n Asset ID: ${uploadData.id}`;
+                        interaction.followUp({ embeds: [] });
                     }
                     catch (e) {
                         if (typeof e === "string") {
@@ -79,9 +81,6 @@ exports.default = {
             collector.on('end', (collected) => __awaiter(void 0, void 0, void 0, function* () {
                 if (collected.size == 0) {
                     interaction.followUp({ embeds: [yield embedClass.errorEmbed('Timeout', 'Please try again as the command had timed out.')] });
-                }
-                else {
-                    interaction.followUp({ embeds: [yield embedClass.infoEmbed('Succes', 'Image upload succesfully \n **DEVELOPER TESTING ONLY**')] });
                 }
             }));
         }
