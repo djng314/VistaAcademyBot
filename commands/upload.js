@@ -15,7 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 const noblox_js_1 = __importDefault(require("noblox.js"));
 const embedsConstruct_1 = __importDefault(require("../functions/embedsConstruct"));
-const fs_1 = __importDefault(require("fs"));
+const fs_1 = require("fs");
+const fs_2 = __importDefault(require("fs"));
+const stream_1 = require("stream");
+const util_1 = require("util");
+const node_fetch_1 = __importDefault(require("node-fetch"));
 let embedClass = new embedsConstruct_1.default();
 function attachIsImage(msgAttach) {
     var url = msgAttach.url;
@@ -51,7 +55,27 @@ exports.default = {
                     let proxyURL = attachment.proxyURL;
                     let url = attachment.url;
                     try {
-                        let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_1.default.createReadStream(url), 6034265);
+                        const download = ({ url, path }) => __awaiter(void 0, void 0, void 0, function* () {
+                            const streamPipeline = (0, util_1.promisify)(stream_1.pipeline);
+                            const response = yield (0, node_fetch_1.default)(url);
+                            if (!response.ok) {
+                                throw new Error(`unexpected response ${response.statusText}`);
+                            }
+                            yield streamPipeline(response.body, (0, fs_1.createWriteStream)(path));
+                        });
+                        (() => __awaiter(void 0, void 0, void 0, function* () {
+                            try {
+                                yield download({
+                                    url: url,
+                                    path: './image.png',
+                                });
+                            }
+                            catch (err) {
+                                console.error(err);
+                            }
+                        }))();
+                        console.log('Done!');
+                        let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_2.default.createReadStream(url), 6034265);
                         let msg = `\n\n Asset ID: ${uploadData.id}`;
                         interaction.followUp({ embeds: [
                                 yield embedClass.infoEmbed('Upload complete', msg)

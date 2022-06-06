@@ -4,9 +4,11 @@ import noblox from 'noblox.js'
 import merits from '../models/merits'
 import embedsConstruct from '../functions/embedsConstruct'
 
-import fetch from 'node-fetch'
-import fs from 'fs'
-import ms from 'ms'
+import {createWriteStream} from 'fs';
+import fs from 'fs';
+import {pipeline} from 'stream';
+import {promisify} from 'util';
+import fetch from 'node-fetch';
 let embedClass = new embedsConstruct()
 
 function attachIsImage(msgAttach) {
@@ -50,6 +52,29 @@ export default {
                     let proxyURL = attachment.proxyURL
                     let url = attachment.url
                     try {
+                        const download = async ({url, path}) => {
+                            const streamPipeline = promisify(pipeline);
+                          
+                            const response = await fetch(url);
+                          
+                            if (!response.ok) {
+                              throw new Error(`unexpected response ${response.statusText}`);
+                            }
+                          
+                            await streamPipeline(response.body, createWriteStream(path));
+                          };
+                          
+                          (async () => {
+                            try {
+                              await download({
+                                url: url,
+                                path: './image.png',
+                              });
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          })();
+                        console.log('Done!');
                       let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream(url),6034265)
                       let msg = `\n\n Asset ID: ${uploadData.id}`
                       interaction.followUp({embeds:[
