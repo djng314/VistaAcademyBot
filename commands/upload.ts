@@ -49,7 +49,7 @@ export default {
                     await fetch(url)
                         .then(res =>
                             
-                            res.body.pipe(fs.createWriteStream('../temp/upload.png'))
+                            res.body.pipe(fs.createWriteStream('../temp/image.png'))
                         )
                     
                 } else {
