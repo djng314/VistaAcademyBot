@@ -77,8 +77,9 @@ export default {
                         console.log('Done!');
                       let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream('image.png'),6034265)
                       let imageID = uploadData.id
+                      console.log(imageID)
                       interaction.followUp({embeds:[
-                          await embedClass.infoEmbed('Success!',`\n \n Asset ID: ${imageID}`)
+                          await embedClass.infoEmbed('Success!',`\n \n Asset ID: ${uploadData.id}`)
                       ]})
                     } catch (e) {
                         if (typeof e === "string") {
