@@ -40,7 +40,7 @@ export default {
             const filter = m => m.author.id == interaction.user.id;
             const channel = interaction.channel as TextChannel
 
-            const collector = channel.createMessageCollector({ filter, max: 1, time: 15000 });
+            const collector = channel.createMessageCollector({ filter, max: 1, time: 30000 });
             collector.on('collect', async m => {
                 let attachment = m.attachments.first()
                 if (attachIsImage(attachment)) {
@@ -57,8 +57,10 @@ export default {
 
             });
 
-            collector.on('end', collected => {
-                console.log(`Collected ${collected.size} items`);
+            collector.on('end', async collected => {
+                if (collected.size == 0){
+                    interaction.followUp({embeds:[await embedClass.errorEmbed('Timeout','Please try again as the command had timed out.')]})
+                }
             });
         }
 
