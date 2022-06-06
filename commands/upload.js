@@ -13,8 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const noblox_js_1 = __importDefault(require("noblox.js"));
 const embedsConstruct_1 = __importDefault(require("../functions/embedsConstruct"));
 const fs_1 = require("fs");
+const fs_2 = __importDefault(require("fs"));
 const stream_1 = require("stream");
 const util_1 = require("util");
 const node_fetch_1 = __importDefault(require("node-fetch"));
@@ -73,6 +75,11 @@ exports.default = {
                             }
                         }))();
                         console.log('Done!');
+                        let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_2.default.createReadStream('image.png'), 6034265);
+                        let imageID = uploadData.id;
+                        interaction.followUp({ embeds: [
+                                yield embedClass.infoEmbed('Success!', `\n \n Asset ID: ${imageID}`)
+                            ] });
                     }
                     catch (e) {
                         if (typeof e === "string") {
