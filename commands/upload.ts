@@ -47,11 +47,30 @@ export default {
                 if (attachIsImage(attachment)) {
                     let proxyURL = attachment.proxyURL
                     let url = attachment.url
-                    await fetch(url)
+                    try {
+                        await fetch(url)
                         .then(res =>
                             
                             res.body.pipe(fs.createWriteStream('../models/image.png'))
                         )
+                    } catch (e) {
+                        if (typeof e === "string") {
+                            e.toUpperCase() // works, `e` narrowed to string
+                            console.log(e)
+                            interaction.followUp({
+                                embeds: [new MessageEmbed()
+                                    .setTitle('Error')
+                                    .setDescription(e)
+                                    .setColor('RED')
+                                    .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                ]
+                            })
+                            throw (e)
+                        } else if (e instanceof Error) {
+                            interaction.followUp({embeds:[await embedClass.errorEmbed('Error',e.message)]})
+                        }
+                    }
+                  
                     
                 } else {
                     interaction.followUp({ embeds: [await embedClass.errorEmbed('Incorrect Format', 'Please make sure the image is a PNG format.')] })

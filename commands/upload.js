@@ -49,8 +49,28 @@ exports.default = {
                 if (attachIsImage(attachment)) {
                     let proxyURL = attachment.proxyURL;
                     let url = attachment.url;
-                    yield (0, node_fetch_1.default)(url)
-                        .then(res => res.body.pipe(fs_1.default.createWriteStream('../models/image.png')));
+                    try {
+                        yield (0, node_fetch_1.default)(url)
+                            .then(res => res.body.pipe(fs_1.default.createWriteStream('../models/image.png')));
+                    }
+                    catch (e) {
+                        if (typeof e === "string") {
+                            e.toUpperCase(); // works, `e` narrowed to string
+                            console.log(e);
+                            interaction.followUp({
+                                embeds: [new discord_js_1.MessageEmbed()
+                                        .setTitle('Error')
+                                        .setDescription(e)
+                                        .setColor('RED')
+                                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                ]
+                            });
+                            throw (e);
+                        }
+                        else if (e instanceof Error) {
+                            interaction.followUp({ embeds: [yield embedClass.errorEmbed('Error', e.message)] });
+                        }
+                    }
                 }
                 else {
                     interaction.followUp({ embeds: [yield embedClass.errorEmbed('Incorrect Format', 'Please make sure the image is a PNG format.')] });
