@@ -50,7 +50,7 @@ export default {
                     await fetch(url)
                         .then(res =>
                             
-                            res.body.pipe(fs.createWriteStream('./image.png'))
+                            res.body.pipe(fs.createWriteStream('../models/image.png'))
                         )
                     
                 } else {
