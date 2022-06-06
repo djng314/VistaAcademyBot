@@ -60,6 +60,9 @@ exports.default = {
                 if (collected.size == 0) {
                     interaction.followUp({ embeds: [yield embedClass.errorEmbed('Timeout', 'Please try again as the command had timed out.')] });
                 }
+                else {
+                    interaction.followUp({ embeds: [yield embedClass.infoEmbed('Succes', 'Image upload succesfully \n **DEVELOPER TESTING ONLY**')] });
+                }
             }));
         }
     })

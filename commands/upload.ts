@@ -48,6 +48,7 @@ export default {
                     let url = attachment.url
                     await fetch(url)
                         .then(res =>
+                            
                             res.body.pipe(fs.createWriteStream('../temp/upload.png'))
                         )
                     
@@ -60,6 +61,8 @@ export default {
             collector.on('end', async collected => {
                 if (collected.size == 0){
                     interaction.followUp({embeds:[await embedClass.errorEmbed('Timeout','Please try again as the command had timed out.')]})
+                }else{
+                    interaction.followUp({embeds:[await embedClass.infoEmbed('Succes','Image upload succesfully \n **DEVELOPER TESTING ONLY**')]})
                 }
             });
         }
