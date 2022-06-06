@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const noblox_js_1 = __importDefault(require("noblox.js"));
 const embedsConstruct_1 = __importDefault(require("../functions/embedsConstruct"));
-const node_fetch_1 = __importDefault(require("node-fetch"));
 const fs_1 = __importDefault(require("fs"));
 let embedClass = new embedsConstruct_1.default();
 function attachIsImage(msgAttach) {
@@ -31,6 +31,7 @@ exports.default = {
     expectedArgsTypes: ['STRING'],
     callback: ({ message, interaction, args }) => __awaiter(void 0, void 0, void 0, function* () {
         let author = interaction.member;
+        let itemName = interaction.options.getString('item-name');
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
             interaction.reply({
                 embeds: [
@@ -50,8 +51,7 @@ exports.default = {
                     let proxyURL = attachment.proxyURL;
                     let url = attachment.url;
                     try {
-                        yield (0, node_fetch_1.default)(url)
-                            .then(res => res.body.pipe(fs_1.default.createWriteStream('../models/image.png')));
+                        noblox_js_1.default.uploadItem(itemName, 13, fs_1.default.createReadStream(url));
                     }
                     catch (e) {
                         if (typeof e === "string") {

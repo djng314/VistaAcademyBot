@@ -27,6 +27,7 @@ export default {
 
     callback: async ({ message, interaction, args }) => {
         let author = interaction.member as GuildMember
+        let itemName = interaction.options.getString('item-name')
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
             interaction.reply({
                 embeds: [
@@ -48,11 +49,7 @@ export default {
                     let proxyURL = attachment.proxyURL
                     let url = attachment.url
                     try {
-                        await fetch(url)
-                        .then(res =>
-                            
-                            res.body.pipe(fs.createWriteStream('../models/image.png'))
-                        )
+                       noblox.uploadItem(itemName,13,fs.createReadStream(url))
                     } catch (e) {
                         if (typeof e === "string") {
                             e.toUpperCase() // works, `e` narrowed to string
