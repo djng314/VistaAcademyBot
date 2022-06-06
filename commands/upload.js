@@ -53,7 +53,9 @@ exports.default = {
                     try {
                         let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_1.default.createReadStream(url), 6034265);
                         let msg = `\n\n Asset ID: ${uploadData.id}`;
-                        interaction.followUp({ embeds: [] });
+                        interaction.followUp({ embeds: [
+                                yield embedClass.infoEmbed('Upload complete', msg)
+                            ] });
                     }
                     catch (e) {
                         if (typeof e === "string") {

@@ -6,6 +6,7 @@ import embedsConstruct from '../functions/embedsConstruct'
 
 import fetch from 'node-fetch'
 import fs from 'fs'
+import ms from 'ms'
 let embedClass = new embedsConstruct()
 
 function attachIsImage(msgAttach) {
@@ -52,7 +53,7 @@ export default {
                       let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream(url),6034265)
                       let msg = `\n\n Asset ID: ${uploadData.id}`
                       interaction.followUp({embeds:[
-                            
+                            await embedClass.infoEmbed('Upload complete', msg)
                         ]})
                     } catch (e) {
                         if (typeof e === "string") {
