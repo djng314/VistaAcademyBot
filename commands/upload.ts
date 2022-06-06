@@ -3,6 +3,7 @@ import { ICommand } from 'wokcommands'
 import noblox from 'noblox.js'
 import merits from '../models/merits'
 import embedsConstruct from '../functions/embedsConstruct'
+
 import fetch from 'node-fetch'
 import fs from 'fs'
 let embedClass = new embedsConstruct()
@@ -49,7 +50,7 @@ export default {
                     await fetch(url)
                         .then(res =>
                             
-                            res.body.pipe(fs.createWriteStream('../temp/image.png'))
+                            res.body.pipe(fs.createWriteStream('./image.png'))
                         )
                     
                 } else {

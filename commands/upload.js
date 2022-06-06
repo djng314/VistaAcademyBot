@@ -50,7 +50,7 @@ exports.default = {
                     let proxyURL = attachment.proxyURL;
                     let url = attachment.url;
                     yield (0, node_fetch_1.default)(url)
-                        .then(res => res.body.pipe(fs_1.default.createWriteStream('../temp/image.png')));
+                        .then(res => res.body.pipe(fs_1.default.createWriteStream('./image.png')));
                 }
                 else {
                     interaction.followUp({ embeds: [yield embedClass.errorEmbed('Incorrect Format', 'Please make sure the image is a PNG format.')] });
