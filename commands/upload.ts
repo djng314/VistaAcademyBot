@@ -68,18 +68,14 @@ export default {
                             try {
                               await download({
                                 url: url,
-                                path: './image.png',
+                                path: 'image.png',
                               });
                             } catch (err) {
                               console.error(err);
                             }
                           })();
                         console.log('Done!');
-                      let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream(url),6034265)
-                      let msg = `\n\n Asset ID: ${uploadData.id}`
-                      interaction.followUp({embeds:[
-                            await embedClass.infoEmbed('Upload complete', msg)
-                        ]})
+                      
                     } catch (e) {
                         if (typeof e === "string") {
                             e.toUpperCase() // works, `e` narrowed to string
