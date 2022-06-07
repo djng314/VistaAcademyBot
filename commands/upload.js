@@ -75,12 +75,13 @@ exports.default = {
                             }
                         }))();
                         console.log('Done!');
+                        interaction.editReply({ embeds: [
+                                yield embedClass.infoEmbed('Processing', 'Please give us a moment to process your image upload.')
+                            ] });
                         let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_2.default.createReadStream('image.png'), 6034265);
-                        let imageID = uploadData.id;
-                        console.log(uploadData);
-                        console.log(imageID);
-                        interaction.followUp({ embeds: [
-                                yield embedClass.infoEmbed('Success!', `\n \n Asset ID: ${uploadData.id}`)
+                        yield m.delete();
+                        interaction.editReply({ embeds: [
+                                yield embedClass.infoEmbed('Success!', `\n \n Asset ID: ${uploadData}`)
                             ] });
                     }
                     catch (e) {
@@ -111,6 +112,9 @@ exports.default = {
                     interaction.followUp({ embeds: [yield embedClass.errorEmbed('Timeout', 'Please try again as the command had timed out.')] });
                 }
             }));
+        }
+        else {
+            interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid Permission', 'You do not have the permission to execute the following command.')] });
         }
     })
 };

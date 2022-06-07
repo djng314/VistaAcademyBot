@@ -36,7 +36,7 @@ export default {
                 embeds: [
                     new MessageEmbed()
                         .setTitle('Image Upload')
-                        .setDescription('Upload the image as an attachment. \n **Does not work yet** ')
+                        .setDescription('Upload the image as an attachment. ')
                         .setColor('AQUA')
                         .setFooter({ text: 'Vista Academy | Developed by Damien' })
                 ]
@@ -75,12 +75,13 @@ export default {
                             }
                           })();
                         console.log('Done!');
+                    interaction.editReply({embeds:[
+                        await embedClass.infoEmbed('Processing', 'Please give us a moment to process your image upload.')
+                    ]})
                       let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream('image.png'),6034265)
-                      let imageID = uploadData.id
-                      console.log(uploadData)
-                      console.log(imageID)
-                      interaction.followUp({embeds:[
-                          await embedClass.infoEmbed('Success!',`\n \n Asset ID: ${uploadData.id}`)
+                    await  m.delete()
+                      interaction.editReply({embeds:[
+                          await embedClass.infoEmbed('Success!',`\n \n Asset ID: ${uploadData}`)
                       ]})
                     } catch (e) {
                         if (typeof e === "string") {
@@ -112,6 +113,8 @@ export default {
                     interaction.followUp({embeds:[await embedClass.errorEmbed('Timeout','Please try again as the command had timed out.')]})
                 }
             });
+        }else{
+            interaction.reply({embeds:[ await embedClass.errorEmbed('Invalid Permission','You do not have the permission to execute the following command.')]})
         }
 
     }
