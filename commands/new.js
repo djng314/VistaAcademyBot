@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const embedsConstruct_1 = __importDefault(require("../functions/embedsConstruct"));
 let embedClass = new embedsConstruct_1.default();
 exports.default = {
@@ -51,6 +52,13 @@ exports.default = {
                 ],
             }).then(channell => channell.setParent(cate));
             interaction.reply({ embeds: [yield embedClass.infoEmbed('Ticket created', `\n Your ticket is at <#${channel.id}>. One of our staff member will be with you shortly.`)], ephemeral: true });
+            yield channel.send({ content: '@everyone' });
+            yield channel.send({ embeds: [new discord_js_1.MessageEmbed()
+                        .setTitle(`${author.displayName} had created a ticket.`)
+                        .setDescription(`Reason: ${reason}`)
+                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                        .setColor('AQUA')
+                ] });
         }
         else {
             interaction.reply({ embeds: [yield embedClass.errorEmbed('Already have an existing ticket', 'You already have an existing ticket.')] });

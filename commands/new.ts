@@ -48,7 +48,14 @@ export default {
                 ],
             }).then(channell => channell.setParent(cate))
         interaction.reply({embeds:[ await embedClass.infoEmbed('Ticket created',`\n Your ticket is at <#${channel.id}>. One of our staff member will be with you shortly.`)],ephemeral:true})
-        } else {
+       await channel.send({content:'@everyone'})
+        await channel.send({embeds:[ new MessageEmbed()
+            .setTitle(`${author.displayName} had created a ticket.`)
+            .setDescription(`Reason: ${reason}`)
+            .setFooter({text:'Vista Academy | Developed by Damien'})
+            .setColor('AQUA')
+            ]})
+    } else {
             interaction.reply({ embeds: [await embedClass.errorEmbed('Already have an existing ticket', 'You already have an existing ticket.')] })
         }
 
