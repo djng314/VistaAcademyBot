@@ -77,6 +77,7 @@ exports.default = {
                         console.log('Done!');
                         let uploadData = yield noblox_js_1.default.uploadItem(itemName, 13, fs_2.default.createReadStream('image.png'), 6034265);
                         let imageID = uploadData.id;
+                        console.log(uploadData);
                         console.log(imageID);
                         interaction.followUp({ embeds: [
                                 yield embedClass.infoEmbed('Success!', `\n \n Asset ID: ${uploadData.id}`)
