@@ -25,7 +25,7 @@ export default {
         if (!cate) return interaction.reply({ ephemeral: true, content: 'No such category is found.' })
         let existingTicket = interaction.guild.channels.cache.find((exist) => exist.name == author.displayName)
         if (!existingTicket) {
-            let channel = await interaction.guild.channels.create("restricted", {
+            let channel = await interaction.guild.channels.create(`${author.displayName}`, {
                 type: "GUILD_TEXT",
                 permissionOverwrites: [
                     {
