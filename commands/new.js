@@ -27,7 +27,7 @@ exports.default = {
         let cate = interaction.guild.channels.cache.find((c) => c.name.toLowerCase() === "tickets" && c.type === "GUILD_CATEGORY");
         if (!cate)
             return interaction.reply({ ephemeral: true, content: 'No such category is found.' });
-        let existingTicket = interaction.guild.channels.cache.find((exist) => exist.name == author.displayName);
+        let existingTicket = interaction.guild.channels.cache.find((exist) => exist.name.toLowerCase() === author.displayName.toLowerCase());
         if (!existingTicket) {
             let channel = yield interaction.guild.channels.create(`${author.displayName}`, {
                 type: "GUILD_TEXT",
