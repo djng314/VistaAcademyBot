@@ -21,7 +21,7 @@ exports.default = {
     slash: true,
     callback: ({ message, interaction, args }) => __awaiter(void 0, void 0, void 0, function* () {
         let channel = interaction.channel;
-        if (channel.parent.name === 'ticket') {
+        if (channel.parent.name === 'tickets') {
             channel.delete('Closing ticket');
         }
         else {

@@ -18,7 +18,7 @@ export default {
 
     callback: async ({ message, interaction, args }) => {
         let channel = interaction.channel
-        if (channel.parent.name === 'ticket'){
+        if (channel.parent.name === 'tickets'){
             channel.delete('Closing ticket')
         }else{
             interaction.reply({embeds:[await embedClass.errorEmbed('Error','You can only close a ticket channel.')]})
