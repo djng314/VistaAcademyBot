@@ -41,7 +41,7 @@ exports.default = {
                 embeds: [
                     new discord_js_1.MessageEmbed()
                         .setTitle('Image Upload')
-                        .setDescription('Upload the image as an attachment. \n **Does not work yet** ')
+                        .setDescription('Upload the image as an attachment. ')
                         .setColor('AQUA')
                         .setFooter({ text: 'Vista Academy | Developed by Damien' })
                 ]
