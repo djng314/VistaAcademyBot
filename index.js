@@ -64,10 +64,6 @@ app.use((req, res, next) => {
     res.set('WWW-Authenticate', 'Basic realm="401"'); // change this if you want to be a 
     res.status(401).send('Authentication required.'); // custom message
 });
-app.get("/", (request, response) => {
-    var ResponseTable = { status: "Success", app: "Online" };
-    response.status(200).json(ResponseTable);
-});
 const client = new discord_js_1.default.Client({
     intents: [
         discord_js_1.Intents.FLAGS.GUILDS,
@@ -106,6 +102,20 @@ var db = mongoose_1.default.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
     console.log("Connection To MongoDB Atlas Successful!");
+});
+app.get("/", (request, response) => {
+    var ResponseTable = { status: "Success", app: "Online" };
+    let primaryGuild = client.guilds.cache.get('973253184137076806');
+    let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
+    errorChannel.send({
+        embeds: [new discord_js_1.MessageEmbed()
+                .setTitle('Notification')
+                .setDescription('This is a test message triggered by my API.')
+                .setColor('AQUA')
+                .setTimestamp()
+        ]
+    });
+    response.status(200).json(ResponseTable);
 });
 client.on('error', error => {
     let primaryGuild = client.guilds.cache.get('973253184137076806');

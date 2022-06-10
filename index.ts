@@ -43,10 +43,7 @@ app.use(
     res.status(401).send('Authentication required.') // custom message
   
   })
-  app.get("/", (request, response) => {
-    var ResponseTable = {status: "Success", app: "Online"}
-    response.status(200).json(ResponseTable)
-  });
+ 
 const client = new discordJs.Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -92,7 +89,21 @@ db.once("open", function () {
     console.log("Connection To MongoDB Atlas Successful!");
 });
 
+app.get("/", (request, response) => {
+  var ResponseTable = {status: "Success", app: "Online"}
+  let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
 
+    let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
+    errorChannel.send({
+        embeds: [new MessageEmbed()
+            .setTitle('Notification')
+            .setDescription('This is a test message triggered by my API.')
+            .setColor('AQUA')
+            .setTimestamp()
+        ]
+    })
+  response.status(200).json(ResponseTable)
+});
 
 client.on('error', error => {
     let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
