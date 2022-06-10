@@ -42,8 +42,32 @@ const path_1 = __importDefault(require("path"));
 const noblox_js_1 = __importDefault(require("noblox.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const merits_1 = __importDefault(require("./models/merits"));
+const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
+let port = 5074;
+let app = (0, express_1.default)();
 const talkedRecently = new Set();
 dotenv_1.default.config();
+app.use(body_parser_1.default.urlencoded({
+    extended: true
+}));
+app.use(body_parser_1.default.json());
+//Authentication
+app.use((req, res, next) => {
+    const auth = { login: 'zutureadmin', password: 'Zu7u4eVbXm8o0' };
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+    if (login && password && login === auth.login && password === auth.password) {
+        return next();
+    }
+    // Access denied
+    res.set('WWW-Authenticate', 'Basic realm="401"'); // change this if you want to be a 
+    res.status(401).send('Authentication required.'); // custom message
+});
+app.get("/", (request, response) => {
+    var ResponseTable = { status: "Success", app: "Online" };
+    response.status(200).json(ResponseTable);
+});
 const client = new discord_js_1.default.Client({
     intents: [
         discord_js_1.Intents.FLAGS.GUILDS,
@@ -143,5 +167,8 @@ client.on('messageDelete', message => {
                 .setTimestamp()
         ]
     });
+});
+app.listen(port, () => {
+    console.log('App is online');
 });
 client.login(process.env.TOKEN);

@@ -43,7 +43,10 @@ app.use(
     res.status(401).send('Authentication required.') // custom message
   
   })
-
+  app.get("/", (request, response) => {
+    var ResponseTable = {status: "Success", app: "Online"}
+    response.status(200).json(ResponseTable)
+  });
 const client = new discordJs.Client({
     intents: [
         Intents.FLAGS.GUILDS,
