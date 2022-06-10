@@ -5,11 +5,44 @@ import path from "path"
 import noblox from "noblox.js"
 import mongoose from "mongoose"
 import merits from "./models/merits"
-
+import express from "express"
+import bodyParser from "body-parser"
+let port = 5074
+let app = express()
 
 
 const talkedRecently = new Set();
 dotenv.config()
+app.use(
+    bodyParser.urlencoded({
+      extended: true
+    })
+  );
+  
+  app.use(bodyParser.json());
+  
+  //Authentication
+  app.use((req, res, next) => {
+  
+  
+  
+    const auth = {login: 'zutureadmin', password: 'Zu7u4eVbXm8o0'} 
+  
+  
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+  
+   
+    if (login && password && login === auth.login && password === auth.password) {
+  
+      return next()
+    }
+  
+    // Access denied
+    res.set('WWW-Authenticate', 'Basic realm="401"') // change this if you want to be a 
+    res.status(401).send('Authentication required.') // custom message
+  
+  })
 
 const client = new discordJs.Client({
     intents: [
@@ -126,6 +159,8 @@ client.on('messageDelete', message => {
 
 
 
-
+app.listen(port,()=>{
+    console.log('App is online')
+  })
 
 client.login(process.env.TOKEN)

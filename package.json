@@ -9,8 +9,10 @@
   "author": "Damien",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.0",
     "discord.js": "^13.7.0",
     "dotenv": "^16.0.1",
+    "express": "^4.18.1",
     "mongoose": "^6.3.3",
     "ms": "^2.1.3",
     "noblox.js": "^4.13.1",
