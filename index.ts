@@ -7,7 +7,7 @@ import mongoose from "mongoose"
 import merits from "./models/merits"
 import express from "express"
 import bodyParser from "body-parser"
-let port = 5074
+let port = 5075
 let app = express()
 
 

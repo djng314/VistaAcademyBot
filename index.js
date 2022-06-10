@@ -44,7 +44,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const merits_1 = __importDefault(require("./models/merits"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
-let port = 5074;
+let port = 5075;
 let app = (0, express_1.default)();
 const talkedRecently = new Set();
 dotenv_1.default.config();
