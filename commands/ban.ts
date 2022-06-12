@@ -5,7 +5,7 @@ import { ICommand } from 'wokcommands'
 
 export default {
     category: 'Moderation',
-    description: 'Bans a user',
+    description: 'Ban a user',
 
     requireRoles: true,
 
