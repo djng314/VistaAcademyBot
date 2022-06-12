@@ -7,7 +7,9 @@ import {createWriteStream} from 'fs';
 import fs from 'fs';
 import {pipeline} from 'stream';
 import {promisify} from 'util';
-import fetch from 'node-fetch';
+import { RequestInfo, RequestInit } from 'node-fetch';
+const fetch = (url: RequestInfo, init?: RequestInit) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(url, init));
 let embedClass = new embedsConstruct()
 
 function attachIsImage(msgAttach) {
