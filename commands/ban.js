@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 exports.default = {
     category: 'Moderation',
-    description: 'Bans a user',
+    description: 'Ban a user',
     requireRoles: true,
     testOnly: true,
     slash: 'both',

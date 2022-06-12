@@ -1,7 +1,6 @@
 import { Collector, GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js'
 import { ICommand } from 'wokcommands'
 import noblox from 'noblox.js'
-import merits from '../models/merits'
 import embedsConstruct from '../functions/embedsConstruct'
 
 import {createWriteStream} from 'fs';
