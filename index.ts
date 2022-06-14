@@ -5,7 +5,7 @@ import path from "path"
 import noblox from "noblox.js"
 import mongoose from "mongoose"
 import merits from "./models/merits"
-import express from "express"
+import express, { response } from "express"
 import bodyParser from "body-parser"
 let port = 5075
 let app = express()
@@ -105,6 +105,38 @@ app.get("/", (request, response) => {
   response.status(200).json(ResponseTable)
 });
 
+app.post("/log", async(request,response)=>{
+  let actions = request.body.actionLogs
+  for (const action of actions){
+    let moderator = action.Moderator
+    let actionTaken = action.Action
+    if (actionTaken == 'Ban' || actionTaken == 'Kick' || actionTaken == 'Warn'){
+      let reason = action.Reason
+      let target = action.Target
+      let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
+
+      let logChannel = primaryGuild.channels.cache.get('975429627935866951') as TextChannel
+      logChannel.send({embeds:[
+        new MessageEmbed()
+        .setTitle(`${actionTaken} Log`)
+        .setDescription(`Moderator: ${moderator} \n Target: ${target} \n Reason: ${reason}`)
+        .setColor('PURPLE')
+        .setFooter({text:'Vista System | Developed by Damien'})
+      ]})
+    }else{
+      let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
+
+      let logChannel = primaryGuild.channels.cache.get('975429627935866951') as TextChannel
+      logChannel.send({embeds:[
+        new MessageEmbed()
+        .setTitle(`${actionTaken} Log`)
+        .setDescription(`Moderator: ${moderator}`)
+        .setColor('PURPLE')
+        .setFooter({text:'Vista System | Developed by Damien'})
+      ]})
+    }
+  }
+})
 client.on('error', error => {
     let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
 

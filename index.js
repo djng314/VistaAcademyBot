@@ -117,6 +117,37 @@ app.get("/", (request, response) => {
     });
     response.status(200).json(ResponseTable);
 });
+app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    let actions = request.body.actionLogs;
+    for (const action of actions) {
+        let moderator = action.Moderator;
+        let actionTaken = action.Action;
+        if (actionTaken == 'Ban' || actionTaken == 'Kick' || actionTaken == 'Warn') {
+            let reason = action.Reason;
+            let target = action.Target;
+            let primaryGuild = client.guilds.cache.get('973253184137076806');
+            let logChannel = primaryGuild.channels.cache.get('975429627935866951');
+            logChannel.send({ embeds: [
+                    new discord_js_1.MessageEmbed()
+                        .setTitle(`${actionTaken} Log`)
+                        .setDescription(`Moderator: ${moderator} \n Target: ${target} \n Reason: ${reason}`)
+                        .setColor('PURPLE')
+                        .setFooter({ text: 'Vista System | Developed by Damien' })
+                ] });
+        }
+        else {
+            let primaryGuild = client.guilds.cache.get('973253184137076806');
+            let logChannel = primaryGuild.channels.cache.get('975429627935866951');
+            logChannel.send({ embeds: [
+                    new discord_js_1.MessageEmbed()
+                        .setTitle(`${actionTaken} Log`)
+                        .setDescription(`Moderator: ${moderator}`)
+                        .setColor('PURPLE')
+                        .setFooter({ text: 'Vista System | Developed by Damien' })
+                ] });
+        }
+    }
+}));
 client.on('error', error => {
     let primaryGuild = client.guilds.cache.get('973253184137076806');
     let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
