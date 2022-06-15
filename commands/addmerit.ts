@@ -27,7 +27,7 @@ export default {
             if(meritNumber>0){
                 let data = await merits.findOne({RobloxUserID:UserID})
                 if(data){
-                    merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: data.Merits+meritNumber})
+                   await merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: data.Merits+meritNumber})
                 }else{
                     await merits.create({
                         RobloxUserID: UserID,

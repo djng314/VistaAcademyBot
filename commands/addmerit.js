@@ -32,7 +32,7 @@ exports.default = {
             if (meritNumber > 0) {
                 let data = yield merits_1.default.findOne({ RobloxUserID: UserID });
                 if (data) {
-                    merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: data.Merits + meritNumber });
+                    yield merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: data.Merits + meritNumber });
                 }
                 else {
                     yield merits_1.default.create({
