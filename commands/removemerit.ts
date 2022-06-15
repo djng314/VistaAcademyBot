@@ -31,9 +31,9 @@ export default {
                         if(data.Merits - meritNumber>0){
                             let newmerit = data.Merits - meritNumber
                             console.log(newmerit)
-                            merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: newmerit})
+                            await merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: newmerit})
                         }else{
-                            merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: 0})
+                            await merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: 0})
                         }
                        
                     }else{
