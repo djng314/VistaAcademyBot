@@ -34,7 +34,8 @@ exports.default = {
                     let data = yield merits_1.default.findOne({ RobloxUserID: UserID });
                     if (data) {
                         if (data.Merits - meritNumber > 0) {
-                            merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: data.Merits - meritNumber });
+                            let newmerit = data.Merits - meritNumber;
+                            merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: newmerit });
                         }
                         else {
                             merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: 0 });
