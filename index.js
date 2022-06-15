@@ -143,9 +143,10 @@ app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, functi
                         .setTitle(`${actionTaken} Log`)
                         .setDescription(`Moderator: ${moderator}`)
                         .setColor('PURPLE')
-                        .setFooter({ text: 'Vista System | Developed by Damien' })
+                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
                 ] });
         }
+        response.status(200).json({ status: 'Success' });
     }
 }));
 client.on('error', error => {

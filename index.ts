@@ -132,9 +132,10 @@ app.post("/log", async(request,response)=>{
         .setTitle(`${actionTaken} Log`)
         .setDescription(`Moderator: ${moderator}`)
         .setColor('PURPLE')
-        .setFooter({text:'Vista System | Developed by Damien'})
+        .setFooter({text:'Vista Academy | Developed by Damien'})
       ]})
     }
+    response.status(200).json({status: 'Success'})
   }
 })
 client.on('error', error => {
