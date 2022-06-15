@@ -35,6 +35,7 @@ exports.default = {
                     if (data) {
                         if (data.Merits - meritNumber > 0) {
                             let newmerit = data.Merits - meritNumber;
+                            console.log(newmerit);
                             merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: newmerit });
                         }
                         else {
