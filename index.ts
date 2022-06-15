@@ -158,31 +158,36 @@ client.on('messageCreate',async(message)=>{
     if(message.content.length >5){
       
       if(message.member){
-        if(talkedRecently.has(message.author.id)){
-          console.log("On cool down")
+        if(message.member.user.bot){
+          console.log('Member is bot')
         }else{
-          talkedRecently.add(message.author.id);
-          
-          var RobloxUsername = message.member.displayName
-          var RobloxID = await noblox.getIdFromUsername(RobloxUsername)
-
-          if(RobloxID){
-            let data = await merits.findOne({RobloxUserID: RobloxID})
-            if(data){
-                await merits.findOneAndUpdate({RobloxUserID: RobloxID},{Merits:parseInt(data.Merits)+1})
-            }else{
-                await merits.create({
-                    RobloxUserID: RobloxID,
-                    Merits: 1
-                })
+          if(talkedRecently.has(message.author.id)){
+            console.log("On cool down")
+          }else{
+            talkedRecently.add(message.author.id);
+            
+            var RobloxUsername = message.member.displayName
+            var RobloxID = await noblox.getIdFromUsername(RobloxUsername)
+  
+            if(RobloxID){
+              let data = await merits.findOne({RobloxUserID: RobloxID})
+              if(data){
+                  await merits.findOneAndUpdate({RobloxUserID: RobloxID},{Merits:parseInt(data.Merits)+1})
+              }else{
+                  await merits.create({
+                      RobloxUserID: RobloxID,
+                      Merits: 1
+                  })
+              }
             }
+             
+            setTimeout(() => {
+              talkedRecently.delete(message.author.id);
+              console.log("Deleted cooldown")
+            }, 240000);
           }
-           
-          setTimeout(() => {
-            talkedRecently.delete(message.author.id);
-            console.log("Deleted cooldown")
-          }, 240000);
         }
+
     }
 }})
 

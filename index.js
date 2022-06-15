@@ -166,29 +166,34 @@ client.on('error', error => {
 client.on('messageCreate', (message) => __awaiter(void 0, void 0, void 0, function* () {
     if (message.content.length > 5) {
         if (message.member) {
-            if (talkedRecently.has(message.author.id)) {
-                console.log("On cool down");
+            if (message.member.user.bot) {
+                console.log('Member is bot');
             }
             else {
-                talkedRecently.add(message.author.id);
-                var RobloxUsername = message.member.displayName;
-                var RobloxID = yield noblox_js_1.default.getIdFromUsername(RobloxUsername);
-                if (RobloxID) {
-                    let data = yield merits_1.default.findOne({ RobloxUserID: RobloxID });
-                    if (data) {
-                        yield merits_1.default.findOneAndUpdate({ RobloxUserID: RobloxID }, { Merits: parseInt(data.Merits) + 1 });
-                    }
-                    else {
-                        yield merits_1.default.create({
-                            RobloxUserID: RobloxID,
-                            Merits: 1
-                        });
-                    }
+                if (talkedRecently.has(message.author.id)) {
+                    console.log("On cool down");
                 }
-                setTimeout(() => {
-                    talkedRecently.delete(message.author.id);
-                    console.log("Deleted cooldown");
-                }, 240000);
+                else {
+                    talkedRecently.add(message.author.id);
+                    var RobloxUsername = message.member.displayName;
+                    var RobloxID = yield noblox_js_1.default.getIdFromUsername(RobloxUsername);
+                    if (RobloxID) {
+                        let data = yield merits_1.default.findOne({ RobloxUserID: RobloxID });
+                        if (data) {
+                            yield merits_1.default.findOneAndUpdate({ RobloxUserID: RobloxID }, { Merits: parseInt(data.Merits) + 1 });
+                        }
+                        else {
+                            yield merits_1.default.create({
+                                RobloxUserID: RobloxID,
+                                Merits: 1
+                            });
+                        }
+                    }
+                    setTimeout(() => {
+                        talkedRecently.delete(message.author.id);
+                        console.log("Deleted cooldown");
+                    }, 240000);
+                }
             }
         }
     }
