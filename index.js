@@ -43,6 +43,7 @@ const noblox_js_1 = __importDefault(require("noblox.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const merits_1 = __importDefault(require("./models/merits"));
 const express_1 = __importDefault(require("express"));
+const bad_words_1 = __importDefault(require("bad-words"));
 const body_parser_1 = __importDefault(require("body-parser"));
 let port = 5075;
 let app = (0, express_1.default)();
@@ -196,6 +197,21 @@ client.on('messageCreate', (message) => __awaiter(void 0, void 0, void 0, functi
                 }
             }
         }
+    }
+    let filter = new bad_words_1.default();
+    let msg = message.content;
+    if (filter.isProfane(msg)) {
+        let primaryGuild = client.guilds.cache.get('973253184137076806');
+        let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
+        errorChannel.send({
+            embeds: [new discord_js_1.MessageEmbed()
+                    .setTitle('Auto-mod')
+                    .setDescription(`Profanity is detected and the message was deleted. \n Message: ${msg}`)
+                    .setColor('BLURPLE')
+                    .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                    .setTimestamp()
+            ]
+        });
     }
 }));
 client.on('messageDelete', message => {

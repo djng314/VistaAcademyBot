@@ -6,6 +6,7 @@ import noblox from "noblox.js"
 import mongoose from "mongoose"
 import merits from "./models/merits"
 import express, { response } from "express"
+import Filter from "bad-words"
 import bodyParser from "body-parser"
 let port = 5075
 let app = express()
@@ -189,7 +190,26 @@ client.on('messageCreate',async(message)=>{
         }
 
     }
-}})
+}
+let filter = new Filter();
+let msg = message.content
+if (filter.isProfane(msg)){
+  let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
+
+    let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
+    errorChannel.send({
+        embeds: [new MessageEmbed()
+            .setTitle('Auto-mod')
+            .setDescription(`Profanity is detected and the message was deleted. \n Message: ${msg}`)
+            .setColor('BLURPLE')
+            .setFooter({text:'Vista Academy | Developed by Damien'})
+            .setTimestamp()
+        ]
+    })
+}
+
+
+})
 
 client.on('messageDelete', message => {
 	console.log(`A message by ${message.member?.user.username} was deleted, but we don't know by who yet.`);
