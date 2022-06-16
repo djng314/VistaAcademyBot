@@ -202,6 +202,7 @@ client.on('messageCreate', (message) => __awaiter(void 0, void 0, void 0, functi
     let msg = message.content;
     if (filter.isProfane(msg)) {
         let primaryGuild = client.guilds.cache.get('973253184137076806');
+        yield message.delete();
         let errorChannel = primaryGuild.channels.cache.get('973555709537042452');
         errorChannel.send({
             embeds: [new discord_js_1.MessageEmbed()

@@ -195,7 +195,7 @@ let filter = new Filter();
 let msg = message.content
 if (filter.isProfane(msg)){
   let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
-
+   await message.delete()
     let errorChannel = primaryGuild.channels.cache.get('973555709537042452') as TextChannel
     errorChannel.send({
         embeds: [new MessageEmbed()
