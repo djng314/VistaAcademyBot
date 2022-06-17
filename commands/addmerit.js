@@ -29,7 +29,12 @@ exports.default = {
         let meritNumber = interaction.options.getNumber('merits') || '';
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
             let UserID = yield noblox_js_1.default.getIdFromUsername(RobloxUsername);
-            if (meritNumber > 0) {
+            let author = interaction.member;
+            let AuthorRobloxUserID = yield noblox_js_1.default.getIdFromUsername(author.displayName);
+            if (AuthorRobloxUserID == UserID) {
+                interaction.reply({ embeds: [yield embedClass.errorEmbed("Invalid Operation", "Can't edit your own merit amount")] });
+            }
+            if (meritNumber > 0 && meritNumber < 10) {
                 let data = yield merits_1.default.findOne({ RobloxUserID: UserID });
                 if (data) {
                     yield merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: data.Merits + meritNumber });
@@ -45,7 +50,7 @@ exports.default = {
                 interaction.reply({ embeds: [yield embedClass.infoEmbed('Merit Updated Succesfully', `\n Roblox Username: ${RobloxUsername}\n Roblox ID: ${UserID} \n New Merit: ${newMerit}`)] });
             }
             else {
-                interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid Input', 'Merits must be more than 0.')] });
+                interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid Input', 'Merits must be more than 0 and less than 10.')] });
             }
         }
         else {

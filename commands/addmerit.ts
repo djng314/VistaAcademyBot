@@ -1,4 +1,4 @@
-import { GuildMember, Message, MessageEmbed } from 'discord.js'
+import { GuildMember, Message, MessageEmbed, User } from 'discord.js'
 import { ICommand } from 'wokcommands'
 import noblox from 'noblox.js'
 import merits from '../models/merits'
@@ -12,40 +12,48 @@ export default {
 
 
     testOnly: true,
-     
+
     slash: true,
     expectedArgs: '<roblox-user> <merits>',
-    expectedArgsTypes: ['STRING','NUMBER'],
+    expectedArgsTypes: ['STRING', 'NUMBER'],
 
 
     callback: async ({ message, interaction, args }) => {
         let author = interaction.member as GuildMember
         let RobloxUsername = interaction.options.getString('roblox-user') || ''
         let meritNumber = interaction.options.getNumber('merits') || ''
-        if(author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')){
+        if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
             let UserID = await noblox.getIdFromUsername(RobloxUsername)
-            if(meritNumber>0){
-                let data = await merits.findOne({RobloxUserID:UserID})
-                if(data){
-                   await merits.findOneAndUpdate({RobloxUserID: UserID},{Merits: data.Merits+meritNumber})
-                }else{
+            let author = interaction.member as GuildMember
+            let AuthorRobloxUserID = await noblox.getIdFromUsername(author.displayName)
+
+            if (AuthorRobloxUserID == UserID) {
+                interaction.reply({ embeds: [await embedClass.errorEmbed("Invalid Operation", "Can't edit your own merit amount")] })
+
+            }
+            if (meritNumber > 0 && meritNumber <10) {
+                let data = await merits.findOne({ RobloxUserID: UserID })
+                if (data) {
+                    await merits.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: data.Merits + meritNumber })
+                } else {
                     await merits.create({
                         RobloxUserID: UserID,
                         Merits: meritNumber
                     })
-                } 
-                
-                let data2 = await merits.findOne({RobloxUserID:UserID})
+                }
+
+                let data2 = await merits.findOne({ RobloxUserID: UserID })
 
                 let newMerit = data2.Merits
 
-                interaction.reply({embeds:[await embedClass.infoEmbed('Merit Updated Succesfully',`\n Roblox Username: ${RobloxUsername}\n Roblox ID: ${UserID} \n New Merit: ${newMerit}`)]})
-            }else{
-                interaction.reply({embeds:[await embedClass.errorEmbed('Invalid Input','Merits must be more than 0.')]})
+                interaction.reply({ embeds: [await embedClass.infoEmbed('Merit Updated Succesfully', `\n Roblox Username: ${RobloxUsername}\n Roblox ID: ${UserID} \n New Merit: ${newMerit}`)] })
+            } else {
+                interaction.reply({ embeds: [await embedClass.errorEmbed('Invalid Input', 'Merits must be more than 0 and less than 10.')] })
             }
 
 
-        }else{
-            interaction.reply({embeds:[await embedClass.errorEmbed('Invalid Permission','You do not have the required permission to execute this command.')]})
+        } else {
+            interaction.reply({ embeds: [await embedClass.errorEmbed('Invalid Permission', 'You do not have the required permission to execute this command.')] })
         }
-    }} as ICommand
+    }
+} as ICommand

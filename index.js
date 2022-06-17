@@ -197,9 +197,11 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
                 Status: 'Processing',
                 Date: `${dateString}`
             });
+            let appicationID = applicationData.id;
             let groupName = groupdata.name;
             let membercount = groupdata.memberCount;
-            let description = `\n **Group Name: **`;
+            let description = `\n **Group Name: ** ${groupName} \n **Group Member: ${membercount}** \n **Discord Code: ${discordInvite}`;
+            let question1 = '****';
         }
     }
     response.status(200).json({ status: 'Success' });
