@@ -159,20 +159,67 @@ app.get('/application/group/:groupid', (request, response) => __awaiter(void 0, 
     let groupID = request.params.groupid;
     let data = yield applications_1.default.findOne({ GroupID: `${groupID}` });
     if (data) {
-        response.status(200).json({ status: 'Not eligible' });
+        if (data.Status == 'Processing') {
+            response.status(200).json({ status: 'Not eligible' });
+        }
+        else {
+            response.status(200).json({ status: 'Eligible' });
+        }
     }
     else {
         response.status(200).json({ status: 'Eligible' });
+    }
+}));
+app.get('/application/delete/:appID', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    let appID = request.params.appID;
+    let data = yield applications_1.default.findById(appID);
+    if (data) {
+        if (data.Status == 'Processing') {
+            response.status(200).json({ status: 'Success!' });
+        }
+        else {
+            applications_1.default.findByIdAndDelete(appID);
+            response.status(200).json({ status: 'Deleted' });
+        }
+    }
+    else {
+        response.status(200).json({ status: 'Failed' });
     }
 }));
 app.get('/application/user/:userid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let UserID = request.params.userid;
     let data = yield applications_1.default.findOne({ RobloxUserID: `${UserID}` });
     if (data) {
-        response.status(200).json({ status: 'Not eligible' });
+        if (data.Status == 'Processing') {
+            response.status(200).json({ status: 'Not eligible' });
+        }
+        else {
+            response.status(200).json({ status: 'Eligible' });
+        }
     }
     else {
         response.status(200).json({ status: 'Eligible' });
+    }
+}));
+app.get('/application/get/:UserID', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    let userID = request.params.UserID;
+    let apps = yield applications_1.default.find({ RobloxUserID: `${userID}` });
+    if (apps) {
+        let key = 0;
+        let appsTable = {};
+        for (const app of apps) {
+            let groupData = yield noblox_js_1.default.getGroup(app.GroupID);
+            let groupName = groupData.name;
+            appsTable[key] = { id: `${app._id}`, name: groupName, status: app.Status };
+            key = key + 1;
+            if (key == 4) {
+                break;
+            }
+        }
+        response.status(200).json({ status: 'Applications', table: appsTable });
+    }
+    else {
+        response.status(200).json({ status: 'No application' });
     }
 }));
 app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
@@ -201,7 +248,25 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
             let groupName = groupdata.name;
             let membercount = groupdata.memberCount;
             let description = `\n **Group Name: ** ${groupName} \n **Group Member: ${membercount}** \n **Discord Code: ${discordInvite}`;
-            let question1 = '****';
+            let question1 = '\n **Why would you like to form an alliance with Vista Academy?**';
+            let question2 = '\n **How can this alliance benefit both groups as a whole?**';
+            let question3 = '\n **What makes your group stand out individually?**';
+            let question4 = '\n **Who will be representing on behalf of your group?**';
+            description += question1;
+            description += `\n${answer1}\n`;
+            description += question2;
+            description += `\n${answer2}\n`;
+            description += question3;
+            description += `\n${answer3}\n`;
+            description += question4;
+            description += `\n${answer4}\n`;
+            yield applicationChannel.send({ embeds: [
+                    new discord_js_1.MessageEmbed()
+                        .setTitle(`New Application: ${appicationID}`)
+                        .setDescription(description)
+                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                        .setColor('AQUA')
+                ] });
         }
     }
     response.status(200).json({ status: 'Success' });
