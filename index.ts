@@ -192,7 +192,25 @@ app.post("/createApplication", async (request, response) => {
       let groupName = groupdata.name
       let membercount = groupdata.memberCount
       let description = `\n **Group Name: ** ${groupName} \n **Group Member: ${membercount}** \n **Discord Code: ${discordInvite}`
-      let question1 = '****'
+      let question1 = '\n **Why would you like to form an alliance with Vista Academy?**'
+      let question2 = '\n **How can this alliance benefit both groups as a whole?**'
+      let question3 = '\n **What makes your group stand out individually?**'
+      let question4 = '\n **Who will be representing on behalf of your group?**'
+      description += question1
+      description +=`\n${answer1}\n`
+      description += question2
+      description +=`\n${answer2}\n`
+      description += question3
+      description +=`\n${answer3}\n`
+      description += question4
+      description +=`\n${answer4}\n`
+      applicationChannel.send({embeds:[
+        new MessageEmbed()
+        .setTitle(`New Application: ${appicationID}`)
+        .setDescription(description)
+        .setFooter({text:'Vista Academy | Developed by Damien'})
+        .setColor('AQUA')
+      ]})
     }
   }
 
