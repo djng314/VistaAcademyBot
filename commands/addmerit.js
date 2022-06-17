@@ -33,6 +33,7 @@ exports.default = {
             let AuthorRobloxUserID = yield noblox_js_1.default.getIdFromUsername(author.displayName);
             if (AuthorRobloxUserID == UserID) {
                 interaction.reply({ embeds: [yield embedClass.errorEmbed("Invalid Operation", "Can't edit your own merit amount")] });
+                return;
             }
             if (meritNumber > 0 && meritNumber < 10) {
                 let data = yield merits_1.default.findOne({ RobloxUserID: UserID });

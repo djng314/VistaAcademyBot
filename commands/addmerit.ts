@@ -29,7 +29,7 @@ export default {
 
             if (AuthorRobloxUserID == UserID) {
                 interaction.reply({ embeds: [await embedClass.errorEmbed("Invalid Operation", "Can't edit your own merit amount")] })
-
+                return
             }
             if (meritNumber > 0 && meritNumber <10) {
                 let data = await merits.findOne({ RobloxUserID: UserID })
