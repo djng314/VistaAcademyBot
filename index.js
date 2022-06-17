@@ -45,6 +45,7 @@ const merits_1 = __importDefault(require("./models/merits"));
 const express_1 = __importDefault(require("express"));
 const bad_words_1 = __importDefault(require("bad-words"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const applications_1 = __importDefault(require("./models/applications"));
 let port = 5075;
 let app = (0, express_1.default)();
 const talkedRecently = new Set();
@@ -128,27 +129,80 @@ app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, functi
             let target = action.Target;
             let primaryGuild = client.guilds.cache.get('973253184137076806');
             let logChannel = primaryGuild.channels.cache.get('975429627935866951');
-            logChannel.send({ embeds: [
+            logChannel.send({
+                embeds: [
                     new discord_js_1.MessageEmbed()
                         .setTitle(`${actionTaken} Log`)
                         .setDescription(`Moderator: ${moderator} \n Target: ${target} \n Reason: ${reason}`)
                         .setColor('PURPLE')
                         .setFooter({ text: 'Vista System | Developed by Damien' })
-                ] });
+                ]
+            });
         }
         else {
             let primaryGuild = client.guilds.cache.get('973253184137076806');
             let logChannel = primaryGuild.channels.cache.get('975429627935866951');
-            logChannel.send({ embeds: [
+            logChannel.send({
+                embeds: [
                     new discord_js_1.MessageEmbed()
                         .setTitle(`${actionTaken} Log`)
                         .setDescription(`Moderator: ${moderator}`)
                         .setColor('PURPLE')
                         .setFooter({ text: 'Vista Academy | Developed by Damien' })
-                ] });
+                ]
+            });
         }
         response.status(200).json({ status: 'Success' });
     }
+}));
+app.get('/application/group/:groupid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    let groupID = request.params.groupid;
+    let data = yield applications_1.default.findOne({ GroupID: `${groupID}` });
+    if (data) {
+        response.status(200).json({ status: 'Not eligible' });
+    }
+    else {
+        response.status(200).json({ status: 'Eligible' });
+    }
+}));
+app.get('/application/user/:userid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    let UserID = request.params.userid;
+    let data = yield applications_1.default.findOne({ RobloxUserID: `${UserID}` });
+    if (data) {
+        response.status(200).json({ status: 'Not eligible' });
+    }
+    else {
+        response.status(200).json({ status: 'Eligible' });
+    }
+}));
+app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    let primaryGuild = client.guilds.cache.get('973253184137076806');
+    let applicationChannel = primaryGuild.channels.cache.get('987397799228370974');
+    let applicationtype = request.body.Type;
+    let GroupID = request.body.GroupID;
+    let discordInvite = request.body.Code;
+    let answer1 = request.body.Answer1;
+    let answer2 = request.body.Answer2;
+    let answer3 = request.body.Answer3;
+    let answer4 = request.body.Answer4;
+    let dateString = request.body.Date;
+    let userID = request.body.UserID;
+    if (applicationtype == 'Partner') {
+        let groupdata = yield noblox_js_1.default.getGroup(GroupID);
+        if (groupdata) {
+            let applicationData = yield applications_1.default.create({
+                Type: 'Partner',
+                RobloxUserID: `${userID}`,
+                GroupID: `${GroupID}`,
+                Status: 'Processing',
+                Date: `${dateString}`
+            });
+            let groupName = groupdata.name;
+            let membercount = groupdata.memberCount;
+            let description = `\n **Group Name: **`;
+        }
+    }
+    response.status(200).json({ status: 'Success' });
 }));
 client.on('error', error => {
     let primaryGuild = client.guilds.cache.get('973253184137076806');
