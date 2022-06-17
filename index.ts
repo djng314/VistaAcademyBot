@@ -149,21 +149,69 @@ app.get('/application/group/:groupid', async (request, response) => {
   let groupID = request.params.groupid
   let data = await applications.findOne({ GroupID: `${groupID}` })
   if (data) {
-    response.status(200).json({ status: 'Not eligible' })
+    if (data.Status == 'Processing'){
+      response.status(200).json({ status: 'Not eligible' })
+    }else{
+      response.status(200).json({ status: 'Eligible' })
+    }
+  
   } else {
     response.status(200).json({ status: 'Eligible' })
+  }
+})
+app.get('/application/delete/:appID', async (request, response) => {
+  let appID = request.params.appID
+  let data = await applications.findById(appID)
+  if (data) {
+    if (data.Status == 'Processing'){
+      response.status(200).json({ status: 'Success!' })
+    }else{
+      applications.findByIdAndDelete(appID)
+      response.status(200).json({ status: 'Deleted' })
+    }
+  
+  } else {
+    response.status(200).json({ status: 'Failed' })
   }
 })
 app.get('/application/user/:userid', async (request, response) => {
   let UserID = request.params.userid
   let data = await applications.findOne({ RobloxUserID: `${UserID}` })
   if (data) {
-    response.status(200).json({ status: 'Not eligible' })
+    if (data.Status == 'Processing'){
+      response.status(200).json({ status: 'Not eligible' })
+    }else{
+      response.status(200).json({ status: 'Eligible' })
+    }
+  
   } else {
     response.status(200).json({ status: 'Eligible' })
   }
 
 })
+
+app.get('/application/get/:UserID', async (request, response) => {
+  let userID = request.params.UserID
+  let apps = await applications.find({ RobloxUserID: `${userID}` })
+  if (apps){
+      let key = 0
+      let appsTable = {}
+      for(const app of apps){
+        let groupData = await noblox.getGroup(app.GroupID)
+        let groupName = groupData.name
+        appsTable[key] = {id: `${app._id}`,name: groupName,status:app.Status}
+        key = key+1
+        if (key == 4){
+          break
+        }
+      }
+      response.status(200).json({ status: 'Applications',table: appsTable })
+  }else{
+    response.status(200).json({ status: 'No application' })
+  }
+})
+
+
 app.post("/createApplication", async (request, response) => {
   let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
 
@@ -204,7 +252,7 @@ app.post("/createApplication", async (request, response) => {
       description +=`\n${answer3}\n`
       description += question4
       description +=`\n${answer4}\n`
-      applicationChannel.send({embeds:[
+      await applicationChannel.send({embeds:[
         new MessageEmbed()
         .setTitle(`New Application: ${appicationID}`)
         .setDescription(description)
