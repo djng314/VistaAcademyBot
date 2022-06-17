@@ -35,7 +35,7 @@ exports.default = {
                 interaction.reply({ embeds: [yield embedClass.errorEmbed("Invalid Operation", "Can't edit your own merit amount")] });
                 return;
             }
-            if (meritNumber > 0 && meritNumber < 10) {
+            if (meritNumber > 0 && meritNumber < 100) {
                 let data = yield merits_1.default.findOne({ RobloxUserID: UserID });
                 if (data) {
                     yield merits_1.default.findOneAndUpdate({ RobloxUserID: UserID }, { Merits: data.Merits + meritNumber });
@@ -51,7 +51,7 @@ exports.default = {
                 interaction.reply({ embeds: [yield embedClass.infoEmbed('Merit Updated Succesfully', `\n Roblox Username: ${RobloxUsername}\n Roblox ID: ${UserID} \n New Merit: ${newMerit}`)] });
             }
             else {
-                interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid Input', 'Merits must be more than 0 and less than 10.')] });
+                interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid Input', 'Merits must be more than 0 and less than 100.')] });
             }
         }
         else {
