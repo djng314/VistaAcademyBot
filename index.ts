@@ -188,7 +188,7 @@ app.get('/profile/get/:id', async (req, res) => {
     warnings = 'NO_WARNS'
   }
 
-  response.status(200).json({ status: 'Success',warnings: warnings,merits: usermerits,bans: bans })
+  res.status(200).json({ status: 'Success',warnings: warnings,merits: usermerits,bans: bans })
 })
 
 app.post('/profile/update/:id', async (req,res)=>{

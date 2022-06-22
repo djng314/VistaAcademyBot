@@ -42,7 +42,7 @@ const path_1 = __importDefault(require("path"));
 const noblox_js_1 = __importDefault(require("noblox.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const merits_1 = __importDefault(require("./models/merits"));
-const express_1 = __importStar(require("express"));
+const express_1 = __importDefault(require("express"));
 const bad_words_1 = __importDefault(require("bad-words"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const applications_1 = __importDefault(require("./models/applications"));
@@ -196,7 +196,7 @@ app.get('/profile/get/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     else {
         warnings = 'NO_WARNS';
     }
-    express_1.response.status(200).json({ status: 'Success', warnings: warnings, merits: usermerits, bans: bans });
+    res.status(200).json({ status: 'Success', warnings: warnings, merits: usermerits, bans: bans });
 }));
 app.post('/profile/update/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;
