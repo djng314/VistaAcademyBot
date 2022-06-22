@@ -149,22 +149,53 @@ app.post("/log", async (request, response) => {
 
 ////////////////////////////////
 // Database Model Reference
-
+import gamewarns from './models/gamewarns'
+import gamebans from './models/gamebans'
 
 
 
 // Admin Initialization
-app.get('/profile/:id', (req, res) => {
-  let id = req.params.id
+app.get('/profile/:id', async (req, res) => {
+  let id = Number(req.params.id)
+  let warnings,usermerits,bans
+  let MeritData = await merits.findOne({ RobloxUserID: id })
+  if (MeritData){
+    usermerits = MeritData.Merits
+  }else{
+    await merits.create({
+      RobloxUserID: id,
+      Merits: 0
+    })
+    usermerits = 0
+  }
+  let bandata = await gamebans.findOne({RobloxUserID: id})
+  if (bandata){
+    bans = {reason: bandata.Reason,moderator: await noblox.getUsernameFromId(bandata.ModeratorUserID)}
+  }else{
+    bans = 'NO_BANS'
+  }
+  let warningsdata = await gamewarns.find({RobloxUserID: id })
+  let warningTable = {}
+  let key = 0
+  if (warningsdata){
+    for (const eachwarn of warningsdata) {
+      let moderatorUsername = await noblox.getUsernameFromId(eachwarn.ModeratorUserID)
+      warningTable[key] = {reason: eachwarn.Reason, Moderator: moderatorUsername}
+      key= key+1
+    }
+    warnings = warningTable
+  }else{
+    warnings = 'NO_WARNS'
+  }
 
-
+  response.status(200).json({ status: 'Success',warnings: warnings,merits: usermerits,bans: bans })
 })
 
-app.post('/profile/:id', (req,res)=>{
+app.post('/profile/:id', async (req,res)=>{
   let id = req.params.id
   let warnings = req.body.warnings
   let merits = req.body.merits
-  
+
 })
 // Applications
 app.get('/application/group/:groupid', async (request, response) => {
