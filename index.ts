@@ -5,7 +5,7 @@ import path from "path"
 import noblox from "noblox.js"
 import mongoose from "mongoose"
 import merits from "./models/merits"
-import express, { response } from "express"
+import express, { request, response } from "express"
 import Filter from "bad-words"
 import bodyParser from "body-parser"
 import application from './models/applications'
@@ -151,6 +151,7 @@ app.post("/log", async (request, response) => {
 // Database Model Reference
 import gamewarns from './models/gamewarns'
 import gamebans from './models/gamebans'
+import e from "express"
 
 
 
@@ -192,10 +193,46 @@ app.get('/profile/get/:id', async (req, res) => {
 })
 
 app.post('/profile/update/:id', async (req,res)=>{
-  let id = req.params.id
+  let id = Number(req.params.id)
   let warnings = req.body.warnings
-  let merits = req.body.merits
+  let newmerits = Number(req.body.merits)
+  let banstate = req.body.banstatus
 
+  for (const warn of warnings) {
+    let warnStatus = warn.exiting
+    let warnReason = warn.reason
+    let warnModerator = Number(warn.Moderator)
+    if (warnStatus == false){
+      await gamewarns.create({
+        RobloxUserID: id,
+        Reason: warnReason,
+        ModeratorUserID: warnModerator
+      })
+    }else{
+      continue
+    }
+  }
+  let meritCheck = await merits.findOne({RobloxUserID: id})
+  if (!meritCheck) {
+    await merits.create({
+      RobloxUserID: id,
+      Merits: newmerits
+    })
+  }else{
+    await merits.findOneAndUpdate({RobloxUserID: id},{Merits: newmerits})
+  }
+
+  if (banstate == true){
+    let banTable = req.body.bandata
+    let banReason = banTable.reason
+    let banModerator = Number(banTable.Moderator)
+    await gamebans.create({
+        RobloxUserID: id,
+        Reason: banReason,
+        ModeratorUserID: banModerator
+    })
+  }
+  res.status(200).json({status: "success"})
 })
 // Applications
 app.get('/application/group/:groupid', async (request, response) => {

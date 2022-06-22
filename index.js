@@ -199,9 +199,46 @@ app.get('/profile/get/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     res.status(200).json({ status: 'Success', warnings: warnings, merits: usermerits, bans: bans });
 }));
 app.post('/profile/update/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let id = req.params.id;
+    let id = Number(req.params.id);
     let warnings = req.body.warnings;
-    let merits = req.body.merits;
+    let newmerits = Number(req.body.merits);
+    let banstate = req.body.banstatus;
+    for (const warn of warnings) {
+        let warnStatus = warn.exiting;
+        let warnReason = warn.reason;
+        let warnModerator = Number(warn.Moderator);
+        if (warnStatus == false) {
+            yield gamewarns_1.default.create({
+                RobloxUserID: id,
+                Reason: warnReason,
+                ModeratorUserID: warnModerator
+            });
+        }
+        else {
+            continue;
+        }
+    }
+    let meritCheck = yield merits_1.default.findOne({ RobloxUserID: id });
+    if (!meritCheck) {
+        yield merits_1.default.create({
+            RobloxUserID: id,
+            Merits: newmerits
+        });
+    }
+    else {
+        yield merits_1.default.findOneAndUpdate({ RobloxUserID: id }, { Merits: newmerits });
+    }
+    if (banstate == true) {
+        let banTable = req.body.bandata;
+        let banReason = banTable.reason;
+        let banModerator = Number(banTable.Moderator);
+        yield gamebans_1.default.create({
+            RobloxUserID: id,
+            Reason: banReason,
+            ModeratorUserID: banModerator
+        });
+    }
+    res.status(200).json({ status: "success" });
 }));
 // Applications
 app.get('/application/group/:groupid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
