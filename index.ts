@@ -108,6 +108,7 @@ app.get("/", (request, response) => {
   response.status(200).json(ResponseTable)
 });
 
+// Admin Log
 app.post("/log", async (request, response) => {
   let actions = request.body.actionLogs
   for (const action of actions) {
@@ -145,6 +146,27 @@ app.post("/log", async (request, response) => {
     response.status(200).json({ status: 'Success' })
   }
 })
+
+////////////////////////////////
+// Database Model Reference
+
+
+
+
+// Admin Initialization
+app.get('/profile/:id', (req, res) => {
+  let id = req.params.id
+
+
+})
+
+app.post('/profile/:id', (req,res)=>{
+  let id = req.params.id
+  let warnings = req.body.warnings
+  let merits = req.body.merits
+  
+})
+// Applications
 app.get('/application/group/:groupid', async (request, response) => {
   let groupID = request.params.groupid
   let data = await applications.findOne({ GroupID: `${groupID}` })
@@ -265,6 +287,8 @@ app.post("/createApplication", async (request, response) => {
 
   response.status(200).json({ status: 'Success' })
 })
+
+
 client.on('error', error => {
   let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
 

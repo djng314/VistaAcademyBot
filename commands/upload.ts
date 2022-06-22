@@ -32,7 +32,8 @@ export default {
     callback: async ({ message, interaction, args }) => {
         let author = interaction.member as GuildMember
         let itemName = interaction.options.getString('item-name')
-        if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
+        interaction.reply({embeds: [ await embedClass.errorEmbed('Command not available','This command is still under development. Please await further announcement.')]})
+        /*if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
@@ -82,7 +83,7 @@ export default {
                       let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream('image.png'),6034265)
                     await  m.delete()
                       interaction.editReply({embeds:[
-                          await embedClass.infoEmbed('Success!',`\n \n Asset ID: ${uploadData}`)
+                          await embedClass.infoEmbed('Success!',`\n \nAsset ID: ${uploadData}`)
                       ]})
                     } catch (e) {
                         if (typeof e === "string") {
@@ -116,7 +117,7 @@ export default {
             });
         }else{
             interaction.reply({embeds:[ await embedClass.errorEmbed('Invalid Permission','You do not have the permission to execute the following command.')]})
-        }
+        }*/
 
     }
 } as ICommand

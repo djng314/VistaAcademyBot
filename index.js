@@ -119,6 +119,7 @@ app.get("/", (request, response) => {
     });
     response.status(200).json(ResponseTable);
 });
+// Admin Log
 app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let actions = request.body.actionLogs;
     for (const action of actions) {
@@ -155,6 +156,18 @@ app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, functi
         response.status(200).json({ status: 'Success' });
     }
 }));
+////////////////////////////////
+// Database Model Reference
+// Admin Initialization
+app.get('/profile/:id', (req, res) => {
+    let id = req.params.id;
+});
+app.post('/profile/:id', (req, res) => {
+    let id = req.params.id;
+    let warnings = req.body.warnings;
+    let merits = req.body.merits;
+});
+// Applications
 app.get('/application/group/:groupid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let groupID = request.params.groupid;
     let data = yield applications_1.default.findOne({ GroupID: `${groupID}` });
