@@ -156,9 +156,6 @@ app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, functi
         response.status(200).json({ status: 'Success' });
     }
 }));
-////////////////////////////////
-// Database Model Reference
-const gamewarns_1 = __importDefault(require("./models/gamewarns"));
 const gamebans_1 = __importDefault(require("./models/gamebans"));
 // Admin Initialization
 app.get('/profile/get/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -182,42 +179,12 @@ app.get('/profile/get/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     else {
         bans = 'NO_BANS';
     }
-    let warningsdata = yield gamewarns_1.default.find({ RobloxUserID: id });
-    let warningTable = {};
-    let key = 0;
-    if (warningsdata) {
-        for (const eachwarn of warningsdata) {
-            let moderatorUsername = yield noblox_js_1.default.getUsernameFromId(eachwarn.ModeratorUserID);
-            warningTable[key] = { reason: eachwarn.Reason, moderator: moderatorUsername };
-            key = key + 1;
-        }
-        warnings = warningTable;
-    }
-    else {
-        warnings = 'NO_WARNS';
-    }
-    res.status(200).json({ status: 'Success', warnings: warnings, merits: usermerits, bans: bans });
+    res.status(200).json({ status: 'Success', merits: usermerits, bans: bans });
 }));
 app.post('/profile/update/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = Number(req.params.id);
-    let warnings = req.body.warnings;
     let newmerits = Number(req.body.merits);
     let banstate = req.body.banstatus;
-    for (const warn of warnings) {
-        let warnStatus = warn.exiting;
-        let warnReason = warn.reason;
-        let warnModerator = Number(warn.Moderator);
-        if (warnStatus == false) {
-            yield gamewarns_1.default.create({
-                RobloxUserID: id,
-                Reason: warnReason,
-                ModeratorUserID: warnModerator
-            });
-        }
-        else {
-            continue;
-        }
-    }
     let meritCheck = yield merits_1.default.findOne({ RobloxUserID: id });
     if (!meritCheck) {
         yield merits_1.default.create({
@@ -346,13 +313,15 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
             description += `\n${answer3}\n`;
             description += question4;
             description += `\n${answer4}\n`;
-            yield applicationChannel.send({ embeds: [
+            yield applicationChannel.send({
+                embeds: [
                     new discord_js_1.MessageEmbed()
                         .setTitle(`New Application: ${appicationID}`)
                         .setDescription(description)
                         .setFooter({ text: 'Vista Academy | Developed by Damien' })
                         .setColor('AQUA')
-                ] });
+                ]
+            });
         }
     }
     response.status(200).json({ status: 'Success' });

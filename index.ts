@@ -1,4 +1,4 @@
-import discordJs, { DiscordAPIError, Guild, Intents, MessageEmbed, TextChannel, User } from "discord.js"
+import discordJs, { DiscordAPIError, Guild, Intents, MessageEmbed, TextChannel, ThreadChannel, User } from "discord.js"
 import dotenv from "dotenv"
 import WOKCommands from "wokcommands"
 import path from "path"
@@ -158,93 +158,68 @@ import e from "express"
 // Admin Initialization
 app.get('/profile/get/:id', async (req, res) => {
   let id = Number(req.params.id)
-  let warnings,usermerits,bans
+  let warnings, usermerits, bans
   let MeritData = await merits.findOne({ RobloxUserID: id })
-  if (MeritData){
+  if (MeritData) {
     usermerits = MeritData.Merits
-  }else{
+  } else {
     await merits.create({
       RobloxUserID: id,
       Merits: 0
     })
     usermerits = 0
   }
-  let bandata = await gamebans.findOne({RobloxUserID: id})
-  if (bandata){
-    bans = {reason: bandata.Reason,moderator: await noblox.getUsernameFromId(bandata.ModeratorUserID)}
-  }else{
+  let bandata = await gamebans.findOne({ RobloxUserID: id })
+  if (bandata) {
+    bans = { reason: bandata.Reason, moderator: await noblox.getUsernameFromId(bandata.ModeratorUserID) }
+  } else {
     bans = 'NO_BANS'
   }
-  let warningsdata = await gamewarns.find({RobloxUserID: id })
-  let warningTable = {}
-  let key = 0
-  if (warningsdata){
-    for (const eachwarn of warningsdata) {
-      let moderatorUsername = await noblox.getUsernameFromId(eachwarn.ModeratorUserID)
-      warningTable[key] = {reason: eachwarn.Reason, moderator: moderatorUsername}
-      key= key+1
-    }
-    warnings = warningTable
-  }else{
-    warnings = 'NO_WARNS'
-  }
 
-  res.status(200).json({ status: 'Success',warnings: warnings,merits: usermerits,bans: bans })
+
+  res.status(200).json({ status: 'Success',  merits: usermerits, bans: bans })
 })
 
-app.post('/profile/update/:id', async (req,res)=>{
+app.post('/profile/update/:id', async (req, res) => {
   let id = Number(req.params.id)
-  let warnings = req.body.warnings
   let newmerits = Number(req.body.merits)
   let banstate = req.body.banstatus
 
-  for (const warn of warnings) {
-    let warnStatus = warn.exiting
-    let warnReason = warn.reason
-    let warnModerator = Number(warn.Moderator)
-    if (warnStatus == false){
-      await gamewarns.create({
-        RobloxUserID: id,
-        Reason: warnReason,
-        ModeratorUserID: warnModerator
-      })
-    }else{
-      continue
-    }
-  }
-  let meritCheck = await merits.findOne({RobloxUserID: id})
+  
+
+  let meritCheck = await merits.findOne({ RobloxUserID: id })
   if (!meritCheck) {
     await merits.create({
       RobloxUserID: id,
       Merits: newmerits
     })
-  }else{
-    await merits.findOneAndUpdate({RobloxUserID: id},{Merits: newmerits})
+  } else {
+    await merits.findOneAndUpdate({ RobloxUserID: id }, { Merits: newmerits })
   }
 
-  if (banstate == true){
+  if (banstate == true) {
     let banTable = req.body.bandata
     let banReason = banTable.reason
     let banModerator = Number(banTable.Moderator)
     await gamebans.create({
-        RobloxUserID: id,
-        Reason: banReason,
-        ModeratorUserID: banModerator
+      RobloxUserID: id,
+      Reason: banReason,
+      ModeratorUserID: banModerator
     })
   }
-  res.status(200).json({status: "success"})
+  res.status(200).json({ status: "success" })
 })
 // Applications
 app.get('/application/group/:groupid', async (request, response) => {
   let groupID = request.params.groupid
   let data = await applications.findOne({ GroupID: `${groupID}` })
   if (data) {
-    if (data.Status == 'Processing'){
+    if (data.Status == 'Processing') {
       response.status(200).json({ status: 'Not eligible' })
-    }else{
+    } else {
       response.status(200).json({ status: 'Eligible' })
     }
-  
+
   } else {
     response.status(200).json({ status: 'Eligible' })
   }
@@ -253,13 +228,13 @@ app.get('/application/delete/:appID', async (request, response) => {
   let appID = request.params.appID
   let data = await applications.findById(appID)
   if (data) {
-    if (data.Status == 'Processing'){
+    if (data.Status == 'Processing') {
       response.status(200).json({ status: 'Success!' })
-    }else{
+    } else {
       applications.findByIdAndDelete(appID)
       response.status(200).json({ status: 'Deleted' })
     }
-  
+
   } else {
     response.status(200).json({ status: 'Failed' })
   }
@@ -268,12 +243,12 @@ app.get('/application/user/:userid', async (request, response) => {
   let UserID = request.params.userid
   let data = await applications.findOne({ RobloxUserID: `${UserID}` })
   if (data) {
-    if (data.Status == 'Processing'){
+    if (data.Status == 'Processing') {
       response.status(200).json({ status: 'Not eligible' })
-    }else{
+    } else {
       response.status(200).json({ status: 'Eligible' })
     }
-  
+
   } else {
     response.status(200).json({ status: 'Eligible' })
   }
@@ -283,20 +258,20 @@ app.get('/application/user/:userid', async (request, response) => {
 app.get('/application/get/:UserID', async (request, response) => {
   let userID = request.params.UserID
   let apps = await applications.find({ RobloxUserID: `${userID}` })
-  if (apps){
-      let key = 0
-      let appsTable = {}
-      for(const app of apps){
-        let groupData = await noblox.getGroup(app.GroupID)
-        let groupName = groupData.name
-        appsTable[key] = {id: `${app._id}`,name: groupName,status:app.Status}
-        key = key+1
-        if (key == 4){
-          break
-        }
+  if (apps) {
+    let key = 0
+    let appsTable = {}
+    for (const app of apps) {
+      let groupData = await noblox.getGroup(app.GroupID)
+      let groupName = groupData.name
+      appsTable[key] = { id: `${app._id}`, name: groupName, status: app.Status }
+      key = key + 1
+      if (key == 4) {
+        break
       }
-      response.status(200).json({ status: 'Applications',table: appsTable })
-  }else{
+    }
+    response.status(200).json({ status: 'Applications', table: appsTable })
+  } else {
     response.status(200).json({ status: 'No application' })
   }
 })
@@ -335,20 +310,22 @@ app.post("/createApplication", async (request, response) => {
       let question3 = '\n **What makes your group stand out individually?**'
       let question4 = '\n **Who will be representing on behalf of your group?**'
       description += question1
-      description +=`\n${answer1}\n`
+      description += `\n${answer1}\n`
       description += question2
-      description +=`\n${answer2}\n`
+      description += `\n${answer2}\n`
       description += question3
-      description +=`\n${answer3}\n`
+      description += `\n${answer3}\n`
       description += question4
-      description +=`\n${answer4}\n`
-      await applicationChannel.send({embeds:[
-        new MessageEmbed()
-        .setTitle(`New Application: ${appicationID}`)
-        .setDescription(description)
-        .setFooter({text:'Vista Academy | Developed by Damien'})
-        .setColor('AQUA')
-      ]})
+      description += `\n${answer4}\n`
+      await applicationChannel.send({
+        embeds: [
+          new MessageEmbed()
+            .setTitle(`New Application: ${appicationID}`)
+            .setDescription(description)
+            .setFooter({ text: 'Vista Academy | Developed by Damien' })
+            .setColor('AQUA')
+        ]
+      })
     }
   }
 
