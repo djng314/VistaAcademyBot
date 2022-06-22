@@ -42,7 +42,7 @@ const path_1 = __importDefault(require("path"));
 const noblox_js_1 = __importDefault(require("noblox.js"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const merits_1 = __importDefault(require("./models/merits"));
-const express_1 = __importDefault(require("express"));
+const express_1 = __importStar(require("express"));
 const bad_words_1 = __importDefault(require("bad-words"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const applications_1 = __importDefault(require("./models/applications"));
@@ -158,15 +158,51 @@ app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, functi
 }));
 ////////////////////////////////
 // Database Model Reference
+const gamewarns_1 = __importDefault(require("./models/gamewarns"));
+const gamebans_1 = __importDefault(require("./models/gamebans"));
 // Admin Initialization
-app.get('/profile/:id', (req, res) => {
-    let id = req.params.id;
-});
-app.post('/profile/:id', (req, res) => {
+app.get('/profile/get/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let id = Number(req.params.id);
+    let warnings, usermerits, bans;
+    let MeritData = yield merits_1.default.findOne({ RobloxUserID: id });
+    if (MeritData) {
+        usermerits = MeritData.Merits;
+    }
+    else {
+        yield merits_1.default.create({
+            RobloxUserID: id,
+            Merits: 0
+        });
+        usermerits = 0;
+    }
+    let bandata = yield gamebans_1.default.findOne({ RobloxUserID: id });
+    if (bandata) {
+        bans = { reason: bandata.Reason, moderator: yield noblox_js_1.default.getUsernameFromId(bandata.ModeratorUserID) };
+    }
+    else {
+        bans = 'NO_BANS';
+    }
+    let warningsdata = yield gamewarns_1.default.find({ RobloxUserID: id });
+    let warningTable = {};
+    let key = 0;
+    if (warningsdata) {
+        for (const eachwarn of warningsdata) {
+            let moderatorUsername = yield noblox_js_1.default.getUsernameFromId(eachwarn.ModeratorUserID);
+            warningTable[key] = { reason: eachwarn.Reason, Moderator: moderatorUsername };
+            key = key + 1;
+        }
+        warnings = warningTable;
+    }
+    else {
+        warnings = 'NO_WARNS';
+    }
+    express_1.response.status(200).json({ status: 'Success', warnings: warnings, merits: usermerits, bans: bans });
+}));
+app.post('/profile/update/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;
     let warnings = req.body.warnings;
     let merits = req.body.merits;
-});
+}));
 // Applications
 app.get('/application/group/:groupid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let groupID = request.params.groupid;
