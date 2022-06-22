@@ -155,7 +155,7 @@ import gamebans from './models/gamebans'
 
 
 // Admin Initialization
-app.get('/profile/:id', async (req, res) => {
+app.get('/profile/get/:id', async (req, res) => {
   let id = Number(req.params.id)
   let warnings,usermerits,bans
   let MeritData = await merits.findOne({ RobloxUserID: id })
@@ -191,7 +191,7 @@ app.get('/profile/:id', async (req, res) => {
   response.status(200).json({ status: 'Success',warnings: warnings,merits: usermerits,bans: bans })
 })
 
-app.post('/profile/:id', async (req,res)=>{
+app.post('/profile/update/:id', async (req,res)=>{
   let id = req.params.id
   let warnings = req.body.warnings
   let merits = req.body.merits
