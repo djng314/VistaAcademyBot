@@ -181,7 +181,7 @@ app.get('/profile/get/:id', async (req, res) => {
   if (warningsdata){
     for (const eachwarn of warningsdata) {
       let moderatorUsername = await noblox.getUsernameFromId(eachwarn.ModeratorUserID)
-      warningTable[key] = {reason: eachwarn.Reason, Moderator: moderatorUsername}
+      warningTable[key] = {reason: eachwarn.Reason, moderator: moderatorUsername}
       key= key+1
     }
     warnings = warningTable

@@ -188,7 +188,7 @@ app.get('/profile/get/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     if (warningsdata) {
         for (const eachwarn of warningsdata) {
             let moderatorUsername = yield noblox_js_1.default.getUsernameFromId(eachwarn.ModeratorUserID);
-            warningTable[key] = { reason: eachwarn.Reason, Moderator: moderatorUsername };
+            warningTable[key] = { reason: eachwarn.Reason, moderator: moderatorUsername };
             key = key + 1;
         }
         warnings = warningTable;
