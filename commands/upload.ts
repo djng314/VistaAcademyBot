@@ -2,14 +2,13 @@ import { Collector, GuildMember, Message, MessageEmbed, TextChannel } from 'disc
 import { ICommand } from 'wokcommands'
 import noblox from 'noblox.js'
 import embedsConstruct from '../functions/embedsConstruct'
-
+import https from 'https'
 import {createWriteStream} from 'fs';
 import fs from 'fs';
 import {pipeline} from 'stream';
 import {promisify} from 'util';
 import { RequestInfo, RequestInit } from 'node-fetch';
-const fetch = (url: RequestInfo, init?: RequestInit) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(url, init));
+
 let embedClass = new embedsConstruct()
 
 function attachIsImage(msgAttach) {
@@ -32,8 +31,8 @@ export default {
     callback: async ({ message, interaction, args }) => {
         let author = interaction.member as GuildMember
         let itemName = interaction.options.getString('item-name')
-        interaction.reply({embeds: [ await embedClass.errorEmbed('Command not available','This command is still under development. Please await further announcement.')]})
-        /*if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
+        //interaction.reply({embeds: [ await embedClass.errorEmbed('Command not available','This command is still under development. Please await further announcement.')]})
+        if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('973310353591111730')) {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
@@ -54,32 +53,22 @@ export default {
                     let proxyURL = attachment.proxyURL
                     let url = attachment.url
                     try {
-                        const download = async ({url, path}) => {
-                            const streamPipeline = promisify(pipeline);
-                          
-                            const response = await fetch(url);
-                          
-                            if (!response.ok) {
-                              throw new Error(`unexpected response ${response.statusText}`);
-                            }
-                          
-                            await streamPipeline(response.body, createWriteStream(path));
-                          };
-                          
-                          (async () => {
-                            try {
-                              await download({
-                                url: url,
-                                path: 'image.png',
-                              });
-                            } catch (err) {
-                              console.error(err);
-                            }
-                          })();
-                        console.log('Done!');
-                    interaction.editReply({embeds:[
-                        await embedClass.infoEmbed('Processing', 'Please give us a moment to process your image upload.')
-                    ]})
+
+                        
+                        const file = fs.createWriteStream("image.png");
+                        const request = https.get(proxyURL, function(response) {
+                           response.pipe(file);
+                        
+                           // after download completed close filestream
+                           file.on("finish", async() => {
+                               file.close();
+                               interaction.editReply({embeds:[
+                                await embedClass.infoEmbed('Processing', 'Please give us a moment to process your image upload.')
+                            ]})
+                               console.log("Download Completed");
+                           });
+                        });
+                  
                       let uploadData = await noblox.uploadItem(itemName,13,fs.createReadStream('image.png'),6034265)
                     await  m.delete()
                       interaction.editReply({embeds:[
@@ -117,7 +106,7 @@ export default {
             });
         }else{
             interaction.reply({embeds:[ await embedClass.errorEmbed('Invalid Permission','You do not have the permission to execute the following command.')]})
-        }*/
+        }
 
     }
 } as ICommand
