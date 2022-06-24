@@ -292,6 +292,7 @@ app.post("/createApplication", async (request, response) => {
   let dateString = request.body.Date
   let userID = request.body.UserID
   if (applicationtype == 'Partner') {
+    console.log('received application')
     let groupdata = await noblox.getGroup(GroupID)
     if (groupdata) {
       let applicationData = await applications.create({
