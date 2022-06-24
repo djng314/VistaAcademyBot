@@ -212,7 +212,7 @@ app.post('/profile/update/:id', async (req, res) => {
 // Applications
 app.get('/application/group/:groupid', async (request, response) => {
   let groupID = request.params.groupid
-  let data = await applications.findOne({ GroupID: `${groupID}` })
+  let data = await applications.findOne({ GroupID: Number(groupID) })
   if (data) {
     if (data.Status == 'Processing') {
       response.status(200).json({ status: 'Not eligible' })
