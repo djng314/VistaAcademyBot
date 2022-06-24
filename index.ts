@@ -295,7 +295,7 @@ app.post("/createApplication", async (request, response) => {
 
     console.log('received application')
     console.log(GroupID)
-    let groupdata = await noblox.getGroup(Number(GroupID))
+    let groupdata = await noblox.getGroup(GroupID)
     if (groupdata) {
       let applicationData = await applications.create({
         Type: 'Partner',

@@ -29,7 +29,6 @@ exports.default = {
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('975144760329269268')) {
             try {
                 let data = yield applications_1.default.findById(applicationID);
-                interaction.reply({ embeds: [yield embedClass.infoEmbed('Invalid ID', 'We did not find any application with that ID')] });
                 if (data) {
                     yield applications_1.default.findByIdAndUpdate(applicationID, { Status: 'Denied' });
                     interaction.reply({ embeds: [yield embedClass.infoEmbed('Denied Application', 'We have denied the application.')] });

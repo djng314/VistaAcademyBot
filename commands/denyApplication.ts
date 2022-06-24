@@ -26,7 +26,6 @@ export default {
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('975144760329269268')) {
             try {
                 let data = await applications.findById(applicationID)
-                interaction.reply({ embeds: [await embedClass.infoEmbed('Invalid ID', 'We did not find any application with that ID')] })
                 if (data) {
                     await applications.findByIdAndUpdate(applicationID, { Status: 'Denied' })
                     interaction.reply({ embeds: [await embedClass.infoEmbed('Denied Application', 'We have denied the application.')] })

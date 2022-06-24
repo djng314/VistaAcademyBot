@@ -290,7 +290,7 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
     if (applicationtype == 'Partner') {
         console.log('received application');
         console.log(GroupID);
-        let groupdata = yield noblox_js_1.default.getGroup(Number(GroupID));
+        let groupdata = yield noblox_js_1.default.getGroup(GroupID);
         if (groupdata) {
             let applicationData = yield applications_1.default.create({
                 Type: 'Partner',
