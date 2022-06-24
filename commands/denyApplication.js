@@ -17,7 +17,7 @@ const embedsConstruct_1 = __importDefault(require("../functions/embedsConstruct"
 let embedClass = new embedsConstruct_1.default();
 exports.default = {
     category: 'Applications',
-    description: "Accept an application",
+    description: "Deny an application",
     testOnly: true,
     slash: true,
     expectedArgs: '<applicaton-id>',
@@ -29,8 +29,8 @@ exports.default = {
             let data = yield applications_1.default.findById(applicationID);
             interaction.reply({ embeds: [yield embedClass.infoEmbed('Invalid ID', 'We did not find any application with that ID')] });
             if (data) {
-                yield applications_1.default.findByIdAndUpdate(applicationID, { Status: 'Accepted' });
-                interaction.reply({ embeds: [yield embedClass.infoEmbed('Accepted Application', 'We have accepted the application.')] });
+                yield applications_1.default.findByIdAndUpdate(applicationID, { Status: 'Denied' });
+                interaction.reply({ embeds: [yield embedClass.infoEmbed('Denied Application', 'We have denied the application.')] });
             }
             else {
                 interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid ID', 'We did not find any application with that ID')] });

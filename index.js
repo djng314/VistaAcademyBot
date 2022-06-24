@@ -263,7 +263,7 @@ app.get('/application/get/:UserID', (request, response) => __awaiter(void 0, voi
         for (const app of apps) {
             let groupData = yield noblox_js_1.default.getGroup(app.GroupID);
             let groupName = groupData.name;
-            appsTable[key] = { id: `${app._id}`, name: groupName, status: app.Status };
+            appsTable[key] = { id: `${app._id}`, name: groupName, status: app.Status, date: app.Date };
             key = key + 1;
             if (key == 4) {
                 break;

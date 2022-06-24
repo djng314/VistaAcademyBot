@@ -56,11 +56,11 @@ export default {
 
                         
                         const file = fs.createWriteStream("image.png");
-                        const request = https.get(proxyURL, function(response) {
+                        const request =  https.get(proxyURL, function(response) {
                            response.pipe(file);
                         
                            // after download completed close filestream
-                           file.on("finish", async() => {
+                            file.on("finish", async() => {
                                file.close();
                                interaction.editReply({embeds:[
                                 await embedClass.infoEmbed('Processing', 'Please give us a moment to process your image upload.')

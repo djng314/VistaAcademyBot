@@ -264,7 +264,7 @@ app.get('/application/get/:UserID', async (request, response) => {
     for (const app of apps) {
       let groupData = await noblox.getGroup(app.GroupID)
       let groupName = groupData.name
-      appsTable[key] = { id: `${app._id}`, name: groupName, status: app.Status }
+      appsTable[key] = { id: `${app._id}`, name: groupName, status: app.Status,date: app.Date }
       key = key + 1
       if (key == 4) {
         break

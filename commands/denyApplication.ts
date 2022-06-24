@@ -8,7 +8,7 @@ let embedClass = new embedsConstruct()
 
 export default {
     category: 'Applications',
-    description: "Accept an application",
+    description: "Deny an application",
 
 
     testOnly: true,
@@ -27,8 +27,8 @@ export default {
             let data = await applications.findById(applicationID)
             interaction.reply({embeds:[await embedClass.infoEmbed('Invalid ID','We did not find any application with that ID')]})
             if (data){
-                await applications.findByIdAndUpdate(applicationID,{Status:'Accepted'})
-                interaction.reply({embeds:[await embedClass.infoEmbed('Accepted Application','We have accepted the application.')]})
+                await applications.findByIdAndUpdate(applicationID,{Status:'Denied'})
+                interaction.reply({embeds:[await embedClass.infoEmbed('Denied Application','We have denied the application.')]})
             }else{
                 interaction.reply({embeds:[await embedClass.errorEmbed('Invalid ID','We did not find any application with that ID')]})
             }
