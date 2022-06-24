@@ -210,7 +210,7 @@ app.post('/profile/update/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
 // Applications
 app.get('/application/group/:groupid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let groupID = request.params.groupid;
-    let data = yield applications_1.default.findOne({ GroupID: Number(groupID) });
+    let data = yield applications_1.default.findOne({ GroupID: groupID });
     if (data) {
         if (data.Status == 'Processing') {
             response.status(200).json({ status: 'Not eligible' });
