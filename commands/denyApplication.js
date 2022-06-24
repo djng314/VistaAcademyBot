@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const applications_1 = __importDefault(require("../models/applications"));
 const embedsConstruct_1 = __importDefault(require("../functions/embedsConstruct"));
 let embedClass = new embedsConstruct_1.default();
@@ -26,14 +27,43 @@ exports.default = {
         let author = interaction.member;
         let applicationID = interaction.options.getString('applicaton-id') || '';
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('975144760329269268')) {
-            let data = yield applications_1.default.findById(applicationID);
-            interaction.reply({ embeds: [yield embedClass.infoEmbed('Invalid ID', 'We did not find any application with that ID')] });
-            if (data) {
-                yield applications_1.default.findByIdAndUpdate(applicationID, { Status: 'Denied' });
-                interaction.reply({ embeds: [yield embedClass.infoEmbed('Denied Application', 'We have denied the application.')] });
+            try {
+                let data = yield applications_1.default.findById(applicationID);
+                interaction.reply({ embeds: [yield embedClass.infoEmbed('Invalid ID', 'We did not find any application with that ID')] });
+                if (data) {
+                    yield applications_1.default.findByIdAndUpdate(applicationID, { Status: 'Denied' });
+                    interaction.reply({ embeds: [yield embedClass.infoEmbed('Denied Application', 'We have denied the application.')] });
+                }
+                else {
+                    interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid ID', 'We did not find any application with that ID')] });
+                }
             }
-            else {
-                interaction.reply({ embeds: [yield embedClass.errorEmbed('Invalid ID', 'We did not find any application with that ID')] });
+            catch (e) {
+                if (typeof e === "string") {
+                    e.toUpperCase(); // works, `e` narrowed to string
+                    console.log(e);
+                    interaction.reply({
+                        embeds: [new discord_js_1.MessageEmbed()
+                                .setTitle('Error')
+                                .setDescription('Invalid ID')
+                                .setColor('RED')
+                                .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                        ]
+                    });
+                    throw (e);
+                    return;
+                }
+                else if (e instanceof Error) {
+                    interaction.reply({
+                        embeds: [new discord_js_1.MessageEmbed()
+                                .setTitle('Error')
+                                .setDescription('Invalid ID')
+                                .setColor('RED')
+                                .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                        ]
+                    });
+                    throw (e);
+                }
             }
         }
         else {

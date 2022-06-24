@@ -24,16 +24,43 @@ export default {
 
 
         if (author.roles.cache.get('973310352936808468') || author.roles.cache.get('975144760329269268')) {
-            let data = await applications.findById(applicationID)
-            interaction.reply({embeds:[await embedClass.infoEmbed('Invalid ID','We did not find any application with that ID')]})
-            if (data){
-                await applications.findByIdAndUpdate(applicationID,{Status:'Denied'})
-                interaction.reply({embeds:[await embedClass.infoEmbed('Denied Application','We have denied the application.')]})
-            }else{
-                interaction.reply({embeds:[await embedClass.errorEmbed('Invalid ID','We did not find any application with that ID')]})
+            try {
+                let data = await applications.findById(applicationID)
+                interaction.reply({ embeds: [await embedClass.infoEmbed('Invalid ID', 'We did not find any application with that ID')] })
+                if (data) {
+                    await applications.findByIdAndUpdate(applicationID, { Status: 'Denied' })
+                    interaction.reply({ embeds: [await embedClass.infoEmbed('Denied Application', 'We have denied the application.')] })
+                } else {
+                    interaction.reply({ embeds: [await embedClass.errorEmbed('Invalid ID', 'We did not find any application with that ID')] })
+                }
+            } catch (e) {
+                if (typeof e === "string") {
+                    e.toUpperCase() // works, `e` narrowed to string
+                    console.log(e)
+                    interaction.reply({
+                        embeds: [new MessageEmbed()
+                            .setTitle('Error')
+                            .setDescription('Invalid ID')
+                            .setColor('RED')
+                            .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                        ]
+                    })
+                    throw (e)
+                    return
+                } else if (e instanceof Error) {
+                    interaction.reply({
+                        embeds: [new MessageEmbed()
+                            .setTitle('Error')
+                            .setDescription('Invalid ID')
+                            .setColor('RED')
+                            .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                        ]
+                    })
+                    throw (e)
+                }
             }
-        }else{
-            interaction.reply({embeds:[await embedClass.errorEmbed('Invalid Permission','You do not have permission for this commmand')]})
+        } else {
+            interaction.reply({ embeds: [await embedClass.errorEmbed('Invalid Permission', 'You do not have permission for this commmand')] })
         }
     }
 } as ICommand
