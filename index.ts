@@ -327,7 +327,7 @@ app.post("/createApplication", async (request, response) => {
       if(filter.isProfane(description)){
        let apptoreject = await applications.findById(appicationID)
         if (apptoreject) {
-          applications.findByIdAndUpdate(appicationID,{ Status: 'Denied'})
+          await applications.findByIdAndUpdate(appicationID,{ Status: 'Denied'})
           await applicationChannel.send({
             embeds: [
               new MessageEmbed()
@@ -344,7 +344,7 @@ app.post("/createApplication", async (request, response) => {
       }else if(answer1.length<5 || answer2.length< 5|| answer3.length<5||answer4.length<5 || answer1 == answer2 || answer2==answer3 || answer3 == answer4){
         let apptoreject = await applications.findById(appicationID)
         if (apptoreject) {
-          applications.findByIdAndUpdate(appicationID,{ Status: 'Denied'})
+          await applications.findByIdAndUpdate(appicationID,{ Status: 'Denied'})
           await applicationChannel.send({
             embeds: [
               new MessageEmbed()

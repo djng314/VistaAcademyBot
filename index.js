@@ -323,7 +323,7 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
             if (filter.isProfane(description)) {
                 let apptoreject = yield applications_1.default.findById(appicationID);
                 if (apptoreject) {
-                    applications_1.default.findByIdAndUpdate(appicationID, { Status: 'Denied' });
+                    yield applications_1.default.findByIdAndUpdate(appicationID, { Status: 'Denied' });
                     yield applicationChannel.send({
                         embeds: [
                             new discord_js_1.MessageEmbed()
@@ -340,7 +340,7 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
             else if (answer1.length < 5 || answer2.length < 5 || answer3.length < 5 || answer4.length < 5 || answer1 == answer2 || answer2 == answer3 || answer3 == answer4) {
                 let apptoreject = yield applications_1.default.findById(appicationID);
                 if (apptoreject) {
-                    applications_1.default.findByIdAndUpdate(appicationID, { Status: 'Denied' });
+                    yield applications_1.default.findByIdAndUpdate(appicationID, { Status: 'Denied' });
                     yield applicationChannel.send({
                         embeds: [
                             new discord_js_1.MessageEmbed()
