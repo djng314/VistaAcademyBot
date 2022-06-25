@@ -241,9 +241,10 @@ app.get('/application/delete/:appID', async (request, response) => {
 })
 app.get('/application/user/:userid', async (request, response) => {
   let UserID = request.params.userid
-  let data = await applications.findOne({ RobloxUserID: `${UserID}` })
+  let data = await applications.find({ RobloxUserID: `${UserID}` })
+
   if (data) {
-    if (data.Status == 'Processing') {
+    if (data.length >= 3) {
       response.status(200).json({ status: 'Not eligible' })
     } else {
       response.status(200).json({ status: 'Eligible' })

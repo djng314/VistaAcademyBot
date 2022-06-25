@@ -241,9 +241,9 @@ app.get('/application/delete/:appID', (request, response) => __awaiter(void 0, v
 }));
 app.get('/application/user/:userid', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let UserID = request.params.userid;
-    let data = yield applications_1.default.findOne({ RobloxUserID: `${UserID}` });
+    let data = yield applications_1.default.find({ RobloxUserID: `${UserID}` });
     if (data) {
-        if (data.Status == 'Processing') {
+        if (data.length >= 3) {
             response.status(200).json({ status: 'Not eligible' });
         }
         else {
