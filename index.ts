@@ -231,7 +231,7 @@ app.get('/application/delete/:appID', async (request, response) => {
     if (data.Status == 'Processing') {
       response.status(200).json({ status: 'Success!' })
     } else {
-      applications.findByIdAndDelete(appID)
+      await applications.findByIdAndDelete(appID)
       response.status(200).json({ status: 'Deleted' })
     }
 

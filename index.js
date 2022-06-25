@@ -231,7 +231,7 @@ app.get('/application/delete/:appID', (request, response) => __awaiter(void 0, v
             response.status(200).json({ status: 'Success!' });
         }
         else {
-            applications_1.default.findByIdAndDelete(appID);
+            yield applications_1.default.findByIdAndDelete(appID);
             response.status(200).json({ status: 'Deleted' });
         }
     }
