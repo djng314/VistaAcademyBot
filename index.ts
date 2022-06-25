@@ -12,7 +12,7 @@ import application from './models/applications'
 import applications from "./models/applications"
 let port = 5075
 let app = express()
-
+let filter = new Filter();
 
 const talkedRecently = new Set();
 dotenv.config()
@@ -323,15 +323,49 @@ app.post("/createApplication", async (request, response) => {
       description += `\n${answer3}\n`
       description += question4
       description += `\n${answer4}\n`
-      await applicationChannel.send({
-        embeds: [
-          new MessageEmbed()
-            .setTitle(`New Application: ${appicationID}`)
-            .setDescription(description)
-            .setFooter({ text: 'Vista Academy | Developed by Damien' })
-            .setColor('AQUA')
-        ]
-      })
+      if(filter.isProfane(description)){
+       let apptoreject = await applications.findById(appicationID)
+        if (apptoreject) {
+          applications.findByIdAndUpdate(appicationID,{ Status: 'Denied'})
+          await applicationChannel.send({
+            embeds: [
+              new MessageEmbed()
+                .setTitle(`New Application: ${appicationID}`)
+                .setDescription(description + `\n **THIS APPLICATION IS AUTOMATICALLY REJECTED BY PROFANITY FILTER**`)
+                .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                .setColor('RED')
+            ]
+          })
+          return 
+        }
+
+      }else if(answer1.length<5 || answer2.length< 5|| answer3.length<5||answer4.length<5 || answer1 == answer2 || answer2==answer3 || answer3 == answer4){
+        let apptoreject = await applications.findById(appicationID)
+        if (apptoreject) {
+          applications.findByIdAndUpdate(appicationID,{ Status: 'Denied'})
+          await applicationChannel.send({
+            embeds: [
+              new MessageEmbed()
+                .setTitle(`New Application: ${appicationID}`)
+                .setDescription(description + `\n **THIS APPLICATION IS AUTOMATICALLY REJECTED BY THE SYSTEM - TROLL APPLICATION**`)
+                .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                .setColor('RED')
+            ]
+          })
+          return 
+        }
+      }else{
+        await applicationChannel.send({
+          embeds: [
+            new MessageEmbed()
+              .setTitle(`New Application: ${appicationID}`)
+              .setDescription(description)
+              .setFooter({ text: 'Vista Academy | Developed by Damien' })
+              .setColor('AQUA')
+          ]
+        })
+      }
+
     }
   }
 
@@ -392,7 +426,7 @@ client.on('messageCreate', async (message) => {
 
     }
   }
-  let filter = new Filter();
+
   let msg = message.content
   if (filter.isProfane(msg)) {
     let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild

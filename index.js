@@ -48,6 +48,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const applications_1 = __importDefault(require("./models/applications"));
 let port = 5075;
 let app = (0, express_1.default)();
+let filter = new bad_words_1.default();
 const talkedRecently = new Set();
 dotenv_1.default.config();
 app.use(body_parser_1.default.urlencoded({
@@ -318,15 +319,49 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
             description += `\n${answer3}\n`;
             description += question4;
             description += `\n${answer4}\n`;
-            yield applicationChannel.send({
-                embeds: [
-                    new discord_js_1.MessageEmbed()
-                        .setTitle(`New Application: ${appicationID}`)
-                        .setDescription(description)
-                        .setFooter({ text: 'Vista Academy | Developed by Damien' })
-                        .setColor('AQUA')
-                ]
-            });
+            if (filter.isProfane(description)) {
+                let apptoreject = yield applications_1.default.findById(appicationID);
+                if (apptoreject) {
+                    applications_1.default.findByIdAndUpdate(appicationID, { Status: 'Denied' });
+                    yield applicationChannel.send({
+                        embeds: [
+                            new discord_js_1.MessageEmbed()
+                                .setTitle(`New Application: ${appicationID}`)
+                                .setDescription(description + `\n **THIS APPLICATION IS AUTOMATICALLY REJECTED BY PROFANITY FILTER**`)
+                                .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                .setColor('RED')
+                        ]
+                    });
+                    return;
+                }
+            }
+            else if (answer1.length < 5 || answer2.length < 5 || answer3.length < 5 || answer4.length < 5 || answer1 == answer2 || answer2 == answer3 || answer3 == answer4) {
+                let apptoreject = yield applications_1.default.findById(appicationID);
+                if (apptoreject) {
+                    applications_1.default.findByIdAndUpdate(appicationID, { Status: 'Denied' });
+                    yield applicationChannel.send({
+                        embeds: [
+                            new discord_js_1.MessageEmbed()
+                                .setTitle(`New Application: ${appicationID}`)
+                                .setDescription(description + `\n **THIS APPLICATION IS AUTOMATICALLY REJECTED BY THE SYSTEM - TROLL APPLICATION**`)
+                                .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                                .setColor('RED')
+                        ]
+                    });
+                    return;
+                }
+            }
+            else {
+                yield applicationChannel.send({
+                    embeds: [
+                        new discord_js_1.MessageEmbed()
+                            .setTitle(`New Application: ${appicationID}`)
+                            .setDescription(description)
+                            .setFooter({ text: 'Vista Academy | Developed by Damien' })
+                            .setColor('AQUA')
+                    ]
+                });
+            }
         }
     }
     response.status(200).json({ status: 'Success' });
@@ -379,7 +414,6 @@ client.on('messageCreate', (message) => __awaiter(void 0, void 0, void 0, functi
             }
         }
     }
-    let filter = new bad_words_1.default();
     let msg = message.content;
     if (filter.isProfane(msg)) {
         let primaryGuild = client.guilds.cache.get('973253184137076806');
