@@ -294,6 +294,7 @@ app.post("/createApplication", async (request, response) => {
   let userID = request.body.UserID
   if (applicationtype == 'Partner') {
     if (GroupID == 6034265){
+      response.status(200).json({ status: 'Success' })
       return
     }
     console.log('received application')
@@ -336,6 +337,7 @@ app.post("/createApplication", async (request, response) => {
                 .setColor('RED')
             ]
           })
+          response.status(200).json({ status: 'Success' })
           return 
         }
 
@@ -352,6 +354,7 @@ app.post("/createApplication", async (request, response) => {
                 .setColor('RED')
             ]
           })
+          response.status(200).json({ status: 'Success' })
           return 
         }
       }else{

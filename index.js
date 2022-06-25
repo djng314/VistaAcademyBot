@@ -290,6 +290,7 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
     let userID = request.body.UserID;
     if (applicationtype == 'Partner') {
         if (GroupID == 6034265) {
+            response.status(200).json({ status: 'Success' });
             return;
         }
         console.log('received application');
@@ -332,6 +333,7 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
                                 .setColor('RED')
                         ]
                     });
+                    response.status(200).json({ status: 'Success' });
                     return;
                 }
             }
@@ -348,6 +350,7 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
                                 .setColor('RED')
                         ]
                     });
+                    response.status(200).json({ status: 'Success' });
                     return;
                 }
             }
