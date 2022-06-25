@@ -214,7 +214,7 @@ app.get('/application/group/:groupid', async (request, response) => {
   let groupID = request.params.groupid
   let data = await applications.findOne({ GroupID: groupID })
   if (data) {
-    if (data.Status == 'Processing') {
+    if (data.Status == 'Processing' || data.Status == 'Accepted') {
       response.status(200).json({ status: 'Not eligible' })
     } else {
       response.status(200).json({ status: 'Eligible' })
@@ -307,7 +307,7 @@ app.post("/createApplication", async (request, response) => {
       let appicationID = applicationData.id
       let groupName = groupdata.name
       let membercount = groupdata.memberCount
-      let description = `\n**Group Name: ** ${groupName} \n**Group Member: ${membercount}** \n**Discord Code: https://discord.gg/${discordInvite}** \n**Applicant Username: ** ${await noblox.getUsernameFromId(userID)}`
+      let description = `\n**Group Link: ** https://www.roblox.com/groups/${GroupID}\n**Group Name: ** ${groupName} \n**Group Member: ${membercount}** \n**Discord Code: https://discord.gg/${discordInvite}** \n**Applicant Username: ** ${await noblox.getUsernameFromId(userID)}`
       let question1 = '\n \n**Why would you like to form an alliance with Vista Academy?**'
       let question2 = '\n**How can this alliance benefit both groups as a whole?**'
       let question3 = '\n**What makes your group stand out individually?**'
