@@ -288,6 +288,9 @@ app.post("/createApplication", (request, response) => __awaiter(void 0, void 0, 
     let dateString = request.body.Date;
     let userID = request.body.UserID;
     if (applicationtype == 'Partner') {
+        if (GroupID == 6034265) {
+            return;
+        }
         console.log('received application');
         console.log(GroupID);
         let groupdata = yield noblox_js_1.default.getGroup(GroupID);
