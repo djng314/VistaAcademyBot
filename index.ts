@@ -111,6 +111,7 @@ app.get("/", (request, response) => {
 // Admin Log
 app.post("/log", async (request, response) => {
   let actions = request.body.actionLogs
+  console.log('Log request received')
   for (const action of actions) {
     let moderator = action.Moderator
     let actionTaken = action.Action

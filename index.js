@@ -123,6 +123,7 @@ app.get("/", (request, response) => {
 // Admin Log
 app.post("/log", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let actions = request.body.actionLogs;
+    console.log('Log request received');
     for (const action of actions) {
         let moderator = action.Moderator;
         let actionTaken = action.Action;
