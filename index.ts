@@ -70,8 +70,8 @@ client.on('ready', async () => {
       .setTimestamp()
     ]
   })
-  const currentUser = await noblox.setCookie(`${process.env["robloxcookie"]}`)
-  console.log(`Logged in as ${currentUser.UserName} [${currentUser.UserID}]`)
+  //const currentUser = await noblox.setCookie(`${process.env["robloxcookie"]}`)
+  //console.log(`Logged in as ${currentUser.UserName} [${currentUser.UserID}]`)
   const wok = new WOKCommands(client, {
     // The name of the local folder for your command files
     commandsDir: path.join(__dirname, 'commands'),
