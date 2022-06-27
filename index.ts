@@ -114,7 +114,8 @@ app.post("/log", async (request, response) => {
   for (const action of actions) {
     let moderator = action.Moderator
     let actionTaken = action.Action
-    if (actionTaken == 'Ban' || actionTaken == 'Kick' || actionTaken == 'Warn') {
+    let logType = action.Type
+    if (logType == 'Moderation') {
       let reason = action.Reason
       let target = action.Target
       let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
@@ -123,21 +124,21 @@ app.post("/log", async (request, response) => {
       logChannel.send({
         embeds: [
           new MessageEmbed()
-            .setTitle(`${actionTaken} Log`)
-            .setDescription(`Moderator: ${moderator} \n Target: ${target} \n Reason: ${reason}`)
+            .setTitle(`Moderation Log`)
+            .setDescription(`\n Action: ${actionTaken}\nModerator: ${moderator} \nTarget: ${target} \n Reason: ${reason}`)
             .setColor('PURPLE')
             .setFooter({ text: 'Vista System | Developed by Damien' })
         ]
       })
     } else {
       let primaryGuild = client.guilds.cache.get('973253184137076806') as Guild
-
+      let aMessage = action.Message
       let logChannel = primaryGuild.channels.cache.get('975429627935866951') as TextChannel
       logChannel.send({
         embeds: [
           new MessageEmbed()
-            .setTitle(`${actionTaken} Log`)
-            .setDescription(`Moderator: ${moderator}`)
+            .setTitle(`Action Log`)
+            .setDescription(`\nAction: ${actionTaken} \nModerator: ${moderator}\nMessage: ${aMessage}`)
             .setColor('PURPLE')
             .setFooter({ text: 'Vista Academy | Developed by Damien' })
         ]
